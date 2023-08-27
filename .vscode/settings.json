@@ -1,0 +1,15 @@
+{
+    "tailwindCSS.includeLanguages": {
+      "typescript": "typescript",
+      "javascript": "javascript",
+      "html": "HTML"
+    },
+  
+   "editor.inlineSuggest.enabled": true,
+    "emmet.triggerExpansionOnTab": true,
+    "tailwindCSS.emmetCompletions": true,
+  
+    "editor.quickSuggestions": {
+      "strings": true
+    }
+}
