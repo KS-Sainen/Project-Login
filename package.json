@@ -1,0 +1,20 @@
+{
+  "name": "Project-Login",
+  "version": "1.0.0",
+  "description": "Suffer?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KS-Sainen/Project-Login.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KS-Sainen/Project-Login/issues"
+  },
+  "homepage": "https://github.com/KS-Sainen/Project-Login#readme"
+}
