@@ -12,9 +12,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <div className="flex w-full min-h-screen justify-center ">
-    <div className="w-96 h-full">
+  <div className="flex w-full min-h-screen justify-center bg-[#242528]">
     <RouterProvider router={router} />
-    </div>
   </div>
 );
