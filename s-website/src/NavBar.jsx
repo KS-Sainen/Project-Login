@@ -8,7 +8,7 @@ function NavBar() {
                 <img src="icon.png" width={121} height={121} />
                 <div className='mt-[44px] ml-[5px] text-3xl text-white font font-semibold'>SADTS</div>
                 <div className='flex mt-[44px] text-2xl ml-auto text-white font-thin'>
-                    <div className='pr-[150px]'>
+                    <div className='pr-[150px] cursor-pointer '>
                         About
                     </div>
                     <div className='pr-[100px]'>
