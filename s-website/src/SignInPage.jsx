@@ -22,7 +22,7 @@ export default function SignIn() {
 
     if (isLoggedIn) {
         return (
-            window.location.href = "/home"
+            window.location.href = "/classoption"
         )
     }
 

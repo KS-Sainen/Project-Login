@@ -22,7 +22,7 @@ export default function SignUp() {
 
     if (isLoggedIn) {
         return (
-            window.location.href = "/home"
+            window.location.href = "/classoption"
         )
     }
 
@@ -71,7 +71,7 @@ export default function SignUp() {
                     />
                     <br />
                     <input
-                        type="text"
+                        type="password"
                         className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Confirm Password"
                         required
