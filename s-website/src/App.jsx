@@ -2,13 +2,11 @@ import React from 'react'
 import NavBar from './NavBar.jsx'
 import TextAndSign from './IntroPage.jsx'
 
-function App() {
+export default function App() {
   return (
     <>
-    <NavBar/>
-    <TextAndSign/>
+      <NavBar />
+      <TextAndSign />
     </>
   )
 }
-
-export default App
