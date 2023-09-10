@@ -42,7 +42,6 @@ export default function SignIn() {
                         type="password"
                         className=" mt-[40px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Password"
-                        oninvalid="this.setCustomValidity('Majburiy maydon')"
                         required
                         {...register("password")}
                     />
