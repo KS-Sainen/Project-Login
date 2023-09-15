@@ -8,7 +8,7 @@ export default function SignUp() {
 
     const isLoggedIn = pb.authStore.isValid
 
-    const signup = async (data) => {
+    const signUp = async (data) => {
         setLoading(true)
         try {
             const record = await pb.collection('users').create(data);
@@ -30,7 +30,7 @@ export default function SignUp() {
     return (
         <>
             <center className="pt-[100px]">
-                <form onSubmit={handleSubmit(signup)}>
+                <form onSubmit={handleSubmit(signUp)}>
                     <input
                         type="text"
                         className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"

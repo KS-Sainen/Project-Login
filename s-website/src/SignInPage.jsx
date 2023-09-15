@@ -8,17 +8,25 @@ export default function SignIn() {
 
     const isLoggedIn = pb.authStore.isValid
 
-    const signin = async (data) => {
+    const signIn = async (data) => {
         setLoading(true)
         try {
             const authData = await pb
                 .collection('users')
                 .authWithPassword(data.email, data.password)
         } catch (error) {
-            alert(error)
+            validation(data)
         }
         setLoading(false)
     }
+    const validation = async(data) => {
+        if (data.email.length == 0) {
+            alert("Please Enter Your Email")
+        } else if (data.password.length == 0) {
+            alert("Please Enter Your Password")
+        }
+    }
+
 
     if (isLoggedIn) {
         return (
@@ -29,12 +37,11 @@ export default function SignIn() {
     return (
         <>
             <center className="pt-[200px]">
-                <form onSubmit={handleSubmit(signin)}>
+                <form onSubmit={handleSubmit(signIn)}>
                     <input
                         type="text"
                         className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Email Address"
-                        required
                         {...register("email")}
                     />
                     <br />
@@ -42,7 +49,6 @@ export default function SignIn() {
                         type="password"
                         className=" mt-[40px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Password"
-                        required
                         {...register("password")}
                     />
                     <br />
