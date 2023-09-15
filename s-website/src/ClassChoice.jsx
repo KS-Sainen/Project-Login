@@ -8,7 +8,7 @@ export default function ClassChoice() {
     const [classroom, setClassroom] = useState()
 
     const getClassroom = async (roomnumber) => {
-        alert(`${roomnumber.length!=0?`Logging into ${roomnumber}`:"Input Your Classroom"}`)
+        alert(`${roomnumber.length!=0?`Logging into ${roomnumber}`:`Input Your Classroom`}`)
         if (roomnumber.length > 0) {
             try {
                 const classroom = await pb.collection("classrooms").getFirstListItem(`room_number="${roomnumber}"`)
