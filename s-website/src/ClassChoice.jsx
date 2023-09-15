@@ -8,13 +8,15 @@ export default function ClassChoice() {
     const [classroom, setClassroom] = useState()
 
     const getClassroom = async (roomnumber) => {
-        alert("Checking Classroom")
-        try {
-            const classroom = await pb.collection("classrooms").getFirstListItem(`room_number="${roomnumber}"`)
-            localStorage.setItem('classroom', classroom.room_number)
-            window.location.href = "/classhome"
-        } catch (e) {
-            alert("Classroom Not Found")
+        alert(`${roomnumber.length!=0?`Logging into ${roomnumber}`:"Input Your Classroom"}`)
+        if (roomnumber.length > 0) {
+            try {
+                const classroom = await pb.collection("classrooms").getFirstListItem(`room_number="${roomnumber}"`)
+                localStorage.setItem('classroom', classroom.room_number)
+                window.location.href = "/classhome"
+            } catch (e) {
+                alert("Classroom Not Found")
+            }
         }
     }
 
