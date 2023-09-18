@@ -1,17 +1,33 @@
 import pb from './database/pb.js'
 import { useState } from 'react'
-import { useForm } from "react-hook-form"
 
 export default function SignUp() {
-    const { register, handleSubmit } = useForm()
     const [isLoading, setLoading] = useState(false)
+
+    const [email, setEmail] = useState()
+    const [firstname, setFirstname] = useState()
+    const [middlename, setMiddlename] = useState()
+    const [lastname, setLastname] = useState()
+    const [password, setPassword] = useState()
+    const [passwordConfirm, setPasswordConfirm] = useState()
 
     const isLoggedIn = pb.authStore.isValid
 
-    const signUp = async (data) => {
+    const signUp = async(FirstName, MiddleName, LastName, Email, Password, PasswordConfirm) => {
         setLoading(true)
         try {
-            const record = await pb.collection('users').create(data);
+            const data = {
+                "email": Email,
+                "password": Password,
+                "passwordConfirm": PasswordConfirm,
+                "firstname": FirstName,
+                "middlename": MiddleName,
+                "lastname": LastName,
+                "field": "unknown",
+            }
+            const record = await pb
+                .collection('users')
+                .create(data)
             alert("Account Created Successfully")
             window.location.href = "/signin"
         } catch (error) {
@@ -30,58 +46,55 @@ export default function SignUp() {
     return (
         <>
             <center className="pt-[100px]">
-                <form onSubmit={handleSubmit(signUp)}>
                     <input
                         type="text"
+                        onChange={(e) => setFirstname(e.target.value)}
                         className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="First Name"
-                        required
-                        {...register("firstname")}
                     />
                     <br />
                     <input
                         type="text"
+                        onChange={(e) => setMiddlename(e.target.value)}
                         className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Middle Name (Optional)"
-                        {...register("middlename")}
                     />
                     <br />
                     <input
                         type="text"
+                        onChange={(e) => setLastname(e.target.value)}
                         className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Last Name"
-                        required
-                        {...register("lastname")}
+                        
                     />
                     <br />
                     <input
                         type="text"
+                        onChange={(e) => setEmail(e.target.value)}
                         className="mt-[40px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Email Address"
-                        required
-                        {...register("email")}
+                        
                     />
                     <br />
                     <input
                         type="password"
+                        onChange={(e) => setPassword(e.target.value)}
                         className=" mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Password"
-                        required
-                        {...register("password")}
+                        
                     />
                     <br />
                     <input
                         type="password"
+                        onChange={(e) => setPasswordConfirm(e.target.value)}
                         className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
                         placeholder="Confirm Password"
-                        required
-                        {...register("passwordConfirm")}
+                        
                     />
                     <br />
-                    <button type="submit" className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
+                    <button type="submit" onClick={() => signUp(firstname, middlename, lastname, email, password, passwordConfirm)} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
                         {isLoading ? 'LOADING...' : 'SIGN UP'}
                     </button>
-                </form>
                 <a href="signin" className='underline text-white'>
                     <div className='mt-8'>Already have an account? Sign In</div>
                 </a>

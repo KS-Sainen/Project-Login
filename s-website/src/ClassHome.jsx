@@ -5,6 +5,7 @@ export default function ClassHome() {
 
     if (!isLoggedIn) {
         window.location.href = "/signin"
+        localStorage.removeItem('classroom')
     }
 
     return (
