@@ -16,17 +16,18 @@ export default function SignIn() {
                 .collection('users')
                 .authWithPassword(Email, Password)
         } catch (e) {
-            validation(Email, Password)
+            //validation(Email, Password)
         }
         setLoading(false)
     }
-    const validation = async(Email, Password) => {
+    
+    /*const validation = async(Email, Password) => {
         if (Email.length == 0) {
             alert("Please Enter Your Email")
         } else if (Password.length == 0) {
             alert("Please Enter Your Password")
         }
-    }
+    }*/
 
 
     if (isLoggedIn) {

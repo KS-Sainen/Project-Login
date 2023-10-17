@@ -8,15 +8,14 @@ export default function ClassChoice() {
     const [classroom, setClassroom] = useState()
 
     const getClassroom = async (roomnumber) => {
-        alert(`${roomnumber.length!=0?`Logging into ${roomnumber}`:`Input Your Classroom`}`)
-        if (roomnumber.length > 0) {
-            try {
-                const classroom = await pb.collection("classrooms").getFirstListItem(`room_number="${roomnumber}"`)
-                localStorage.setItem('classroom', classroom.room_number)
-                window.location.href = "/classhome"
-            } catch (e) {
-                alert("Classroom Not Found")
-            }
+        alert(`${roomnumber.length != 0 ? `Please wait, logging into ${roomnumber}` : `Input Your Classroom`}`)
+        try {
+            const roomPath = roomnumber.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'')
+            const roomCheck = await pb.collection(roomPath).getList()
+            localStorage.setItem('classroom', roomPath)
+            window.location.href = `/class/${roomPath}`
+        } catch (e) {
+            alert("Classroom Not Found")
         }
     }
 
@@ -59,7 +58,7 @@ export default function ClassChoice() {
                         className="mt-[130px] bg-[#59A3F9] outline-[#59A3F9] outline text-white text-[20px] placeholder-gray-300 font-bold text-center rounded-lg py-2 px-[160px]"
                     />
                 </div>
-                <button type="submit" onClick={() => {getClassroom(classroom)}} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
+                <button type="submit" onClick={() => { getClassroom(classroom) }} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
                     OPEN
                 </button>
             </center>

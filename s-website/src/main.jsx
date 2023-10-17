@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     element: <ClassChoice />,
   },
   {
-    path: "/classhome",
+    path: "/class/:key",
     element: <ClassHome />,
   },
 ])
