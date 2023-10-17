@@ -5,18 +5,24 @@ import { useState } from 'react'
 export default function ClassChoice() {
     const isLoggedIn = pb.authStore.isValid;
 
-    const [classroom, setClassroom] = useState()
+    const [classroom, setClassroom] = useState('')
+    const [isLoading, setLoading] = useState(false)
 
     const getClassroom = async (roomnumber) => {
-        alert(`${roomnumber.length != 0 ? `Please wait, logging into ${roomnumber}` : `Input Your Classroom`}`)
-        try {
-            const roomPath = roomnumber.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'')
-            const roomCheck = await pb.collection(roomPath).getList()
-            localStorage.setItem('classroom', roomPath)
-            window.location.href = `/class/${roomPath}`
-        } catch (e) {
-            alert("Classroom Not Found")
+        if (roomnumber.length == 0) {
+            alert("Please Input Your Classroom")
+        } else {
+            try {
+                setLoading(true)
+                const roomPath = roomnumber.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'')
+                const roomCheck = await pb.collection(roomPath).getList()
+                localStorage.setItem('classroom', roomPath)
+                window.location.href = `/class/${roomPath}`
+            } catch (e) {
+                alert("Classroom Not Found")
+            }
         }
+        setLoading(false)
     }
 
     if (!isLoggedIn) {
@@ -59,7 +65,7 @@ export default function ClassChoice() {
                     />
                 </div>
                 <button type="submit" onClick={() => { getClassroom(classroom) }} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
-                    OPEN
+                    {isLoading ? 'LOADING...' : 'OPEN CLASSROOM'}
                 </button>
             </center>
         </>
