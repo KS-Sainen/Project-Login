@@ -64,7 +64,7 @@ export default function ClassChoice() {
                         className="mt-[130px] bg-[#59A3F9] outline-[#59A3F9] outline text-white text-[20px] placeholder-gray-300 font-bold text-center rounded-lg py-2 px-[160px]"
                     />
                 </div>
-                <button type="submit" onClick={() => { getClassroom(classroom) }} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
+                <button type="submit" onClick={() => {getClassroom(classroom)}} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
                     {isLoading ? 'LOADING...' : 'OPEN CLASSROOM'}
                 </button>
             </center>
