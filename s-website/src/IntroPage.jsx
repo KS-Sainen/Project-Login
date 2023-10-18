@@ -8,7 +8,7 @@ export default function TextAndSign() {
                     <div className="font-thin text-2xl text-[#A5A6A7] mb-10">Efficiency in education begins<br />with punctuality</div>
 
                     <a href="signin">
-                        <button className=" mt-5 bg-[#59A3F9] outline-[#59A3F9] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
+                        <button className="mt-5 bg-[#59A3F9] outline-[#59A3F9] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
                             SIGN IN
                         </button>
                     </a>
