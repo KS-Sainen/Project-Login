@@ -7,7 +7,11 @@ function StudentBar({ name, surname, number, status }) {
             <div className="ml-[45px]">{number}</div>
             <div className="-ml-[75px]">{name}</div>
             <div className="-ml-[48px]">{surname}</div>
-            <div className="text-center">{status}</div>
+            {status == "LEAVE ON PERMISSION" ?
+                <div className="-ml-[100px] w-[1000px]">{status}</div>
+                :
+                <div className="text-center -ml-2">{status}</div>
+            }
         </div>
     )
 }

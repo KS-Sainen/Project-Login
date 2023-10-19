@@ -51,7 +51,8 @@ export default function ClassHome() {
             setNumLeave(await getAmount("lop"))
         }
 
-        pb.collection(key).subscribe('*', () => {
+        pb.collection(key).subscribe('*', function (e) {
+            console.log(e)
             getAllList()
         });
         getAllList()
@@ -84,7 +85,7 @@ export default function ClassHome() {
                                     name={item.name.toUpperCase()}
                                     surname={item.surname.toUpperCase()}
                                     number={item.number}
-                                    status={item.arrival_status.toUpperCase()}
+                                    status={item.arrival_status=="lop" ? "LEAVE ON PERMISSION" : item.arrival_status.toUpperCase()}
                                 />
                             ))}
                         </div>
