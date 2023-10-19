@@ -1,6 +1,6 @@
 import React from 'react'
-import NavBar from './NavBar.jsx'
-import TextAndSign from './IntroPage.jsx'
+import NavBar from './HomePageComp/NavBar.jsx'
+import TextAndSign from './HomePageComp/IntroPage.jsx'
 
 export default function App() {
   return (
