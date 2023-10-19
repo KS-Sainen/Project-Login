@@ -3,12 +3,19 @@ import React from 'react'
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import StudentBar from "./prefab/nameinfo.jsx"
-import { get } from 'react-hook-form'
+import { get, set } from 'react-hook-form'
 import { data } from 'autoprefixer'
 
 export default function ClassHome() {
     const { key } = useParams()
     const [list, setList] = useState([])
+
+    const [numPresent, setNumPresent] = useState(0)
+    const [numAbsent, setNumAbsent] = useState(0)
+    const [numLate, setNumLate] = useState(0)
+    const [numLeave, setNumLeave] = useState(0)
+    const [numTotal, setNumTotal] = useState(0)
+
     const isLoggedIn = pb.authStore.isValid
     const roomLabel = key[0] + "." + key[1] + "/" + key[2]
 
@@ -16,13 +23,37 @@ export default function ClassHome() {
         const data = await pb.collection(key).getFullList({})
         data.sort((a, b) => a.number - b.number)
         return data
-        // console.log(data)
+    }
+
+    const getAmount = async (status) => {
+        const data = await pb.collection(key).getFullList({})
+        let count = 0
+        data.forEach((item) => {
+            if (item.arrival_status == status) {
+                count += 1
+            }
+        })
+        return count
+    }
+
+    const getNumTotal = async () => {
+        const data = await pb.collection(key).getFullList({})
+        return data.length
     }
 
     useEffect(() => {
         const getAllList = async () => {
             setList(await getNameList())
+            setNumTotal(await getNumTotal())
+            setNumPresent(await getAmount("present"))
+            setNumAbsent(await getAmount("absent"))
+            setNumLate(await getAmount("late"))
+            setNumLeave(await getAmount("lop"))
         }
+
+        pb.collection(key).subscribe('*', () => {
+            getAllList()
+        });
         getAllList()
     }, [])
 
@@ -31,7 +62,7 @@ export default function ClassHome() {
     }
 
     return (
-        <>
+        <>-
             <center className="pt-[65px]">
                 <div className="mr-[1123px] bg-[#424345] w-[328px] h-[110px] rounded-t-[50px]">
                     <div className="tracking-widest text-white pt-[15px] text-[50px] font-semibold">
@@ -61,7 +92,21 @@ export default function ClassHome() {
 
                     {/*activity box*/}
                     <div className="bg-[#D9D9D9] w-[300px] h-[450px] float-right mr-[60px] mt-[25px] rounded-3xl">
-                        <div className='text-2xl mt-5 font-bold'>STUDENT ATTENDANCE</div>
+                        <div className='text-xl mt-5 font-extrabold'>STUDENT ATTENDANCE</div>
+                        <div className='grid gap-y-[30px] grid-cols-2 text-lg mt-10 font-bold'>
+                            <span>CATEGORIES</span>
+                            <span>AMOUNT</span>
+                            <span className='font-semibold'>PRESENT</span>
+                            <span className='font-semibold'>{numPresent <= 9 ? "0" + numPresent : numPresent}</span>
+                            <span className='font-semibold'>ABSENT</span>
+                            <span className='font-semibold'>{numAbsent <= 9 ? "0" + numAbsent : numAbsent}</span>
+                            <span className='font-semibold'>LATE</span>
+                            <span className='font-semibold'>{numLate <= 9 ? "0" + numLate : numLate}</span>
+                            <span className='font-semibold text-[16px] -mt-3 ml-1.5'>LEAVE ON PERMISSION</span>
+                            <span className='font-semibold'>{numLeave <= 9 ? "0" + numLeave : numLeave}</span>
+                            <span className='font-semibold'>TOTAL</span>
+                            <span className='font-semibold'>{numTotal <= 9 ? "0" + numTotal : numTotal}</span>
+                        </div>
                     </div>
                 </div>
             </center>
