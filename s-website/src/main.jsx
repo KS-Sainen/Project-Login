@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import App from "./HomePage.jsx"
 import "./index.css"
 import SignIn from "./SignInPage.jsx"
-import ClassChoice from "./OptionPage.jsx"
+import ClassChoice from "./ClassChoice.jsx"
 import SignUp from "./SignUpPage.jsx"
-import ClassHome from "./ClassPage.jsx"
+import ClassHome from "./ClassHome.jsx"
 
 const router = createBrowserRouter([
   {
