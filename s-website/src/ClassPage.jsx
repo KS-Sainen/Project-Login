@@ -51,11 +51,10 @@ export default function ClassHome() {
             setNumLeave(await getAmount("lop"))
         }
 
+        getAllList()
         pb.collection(key).subscribe('*', function (e) {
-            console.log(e)
             getAllList()
         });
-        getAllList()
     }, [])
 
     if (localStorage.getItem('classroom') != key) {
@@ -85,7 +84,7 @@ export default function ClassHome() {
                                     name={item.name.toUpperCase()}
                                     surname={item.surname.toUpperCase()}
                                     number={item.number}
-                                    status={item.arrival_status=="lop" ? "LEAVE ON PERMISSION" : item.arrival_status.toUpperCase()}
+                                    status={item.arrival_status == "lop" ? "LEAVE ON PERMISSION" : item.arrival_status.toUpperCase()}
                                 />
                             ))}
                         </div>
