@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import App from "./HomePage.jsx"
 import "./index.css"
 import SignIn from "./SignInPage.jsx"
-import ClassChoice from "./ClassChoice.jsx"
+import ClassChoice from "./OptionPage.jsx"
 import SignUp from "./SignUpPage.jsx"
-import ClassHome from "./ClassHome.jsx"
+import ClassHome from "./ClassPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <div className="w-full min-h-screen bg-[#242528]">
+  <div className="w-full min-h-screen min-w-max bg-[#242528]">
     <RouterProvider router={router} />
   </div>
 )
