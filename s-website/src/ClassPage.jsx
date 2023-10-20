@@ -7,7 +7,7 @@ import { get, set } from 'react-hook-form'
 import { data } from 'autoprefixer'
 
 export default function ClassHome() {
-    const { key } = useParams()
+    const {key} = useParams()
     const [list, setList] = useState([])
 
     const [numPresent, setNumPresent] = useState(0)
@@ -81,6 +81,7 @@ export default function ClassHome() {
                             {list.map((item) => (
                                 <StudentBar
                                     key={item.id}
+                                    itemID={item.id}
                                     name={item.name.toUpperCase()}
                                     surname={item.surname.toUpperCase()}
                                     number={item.number}

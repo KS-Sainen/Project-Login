@@ -7,6 +7,7 @@ import SignIn from "./SignInPage.jsx"
 import ClassChoice from "./OptionPage.jsx"
 import SignUp from "./SignUpPage.jsx"
 import ClassHome from "./ClassPage.jsx"
+import InfoPage from "./InfoPage.jsx"
 
 const router = createBrowserRouter([
   {
@@ -22,13 +23,17 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/classoption",
+    path: "/class",
     element: <ClassChoice />,
   },
   {
     path: "/class/:key",
     element: <ClassHome />,
   },
+  {
+    path: "/class/:room/studentinfo/:key",
+    element: <InfoPage />,
+  }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(

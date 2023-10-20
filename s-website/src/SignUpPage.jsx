@@ -38,7 +38,7 @@ export default function SignUp() {
 
     if (isLoggedIn) {
         return (
-            window.location.href = "/classoption"
+            window.location.href = "/class"
         )
     }
 

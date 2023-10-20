@@ -32,7 +32,7 @@ export default function SignIn() {
 
     if (isLoggedIn) {
         return (
-            window.location.href = "/classoption"
+            window.location.href = "/class"
         )
     }
 

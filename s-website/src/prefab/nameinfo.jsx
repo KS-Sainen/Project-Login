@@ -1,9 +1,15 @@
 import React from "react";
+import { useParams } from "react-router-dom"
 import { Link } from 'react-router-dom'
 
-function StudentBar({ name, surname, number, status }) {
+function StudentBar({itemID, name, surname, number, status }) {
+    const {key} = useParams()
+
     return (
-        <div className="float-left text-left grid grid-cols-4 gap-56 mt-[10px] bg-[#D9D9D9] outline-[#D9D9D9] w-[950px] outline text-black text-[20px] py-2 font-bold rounded-2xl pr-[80px] pl-5 ml-[25px] mb-3">
+        <div onClick={() => {
+            window.location.href = `/class/${key}/studentinfo/${itemID}`
+        }}
+            className="cursor-pointer float-left text-left grid grid-cols-4 gap-56 mt-[10px] bg-[#D9D9D9] outline-[#D9D9D9] w-[950px] outline text-black text-[20px] py-2 font-bold rounded-2xl pr-[80px] pl-5 ml-[25px] mb-3">
             <div className="ml-[45px]">{number}</div>
             <div className="-ml-[75px]">{name}</div>
             <div className="-ml-[48px]">{surname}</div>
