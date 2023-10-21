@@ -7,52 +7,45 @@ import { get, set } from 'react-hook-form'
 import { data } from 'autoprefixer'
 
 export default function ClassHome() {
-    const {key} = useParams()
-    const [list, setList] = useState([])
-
-    const [numPresent, setNumPresent] = useState(0)
-    const [numAbsent, setNumAbsent] = useState(0)
-    const [numLate, setNumLate] = useState(0)
-    const [numLeave, setNumLeave] = useState(0)
-    const [numTotal, setNumTotal] = useState(0)
+    const { key } = useParams()
+    const [nameList, setNameList] = useState([])
+    const [info, setInfo] = useState({})
 
     const isLoggedIn = pb.authStore.isValid
     const roomLabel = key[0] + "." + key[1] + "/" + key[2]
 
-    const getNameList = async () => {
-        const data = await pb.collection(key).getFullList({})
-        data.sort((a, b) => a.number - b.number)
-        return data
-    }
-
-    const getAmount = async (status) => {
-        const data = await pb.collection(key).getFullList({})
-        let count = 0
-        data.forEach((item) => {
-            if (item.arrival_status == status) {
-                count += 1
+    const getInfo = async () => {
+        const keyData = await pb.collection(key).getFullList({})
+        keyData.sort((a, b) => a.number - b.number)
+        const countTotal = keyData.length
+        let countNumPresent = 0
+        let countNumAbsent = 0
+        let countNumLate = 0
+        let countNumLOP = 0
+        keyData.forEach((item) => {
+            if (item.arrival_status == "present") {
+                countNumPresent += 1
+            } else if (item.arrival_status == "absent") {
+                countNumAbsent += 1
+            } else if (item.arrival_status == "late") {
+                countNumLate += 1
+            } else if (item.arrival_status == "lop") {
+                countNumLOP += 1
             }
         })
-        return count
-    }
-
-    const getNumTotal = async () => {
-        const data = await pb.collection(key).getFullList({})
-        return data.length
+        return { keyData, countNumPresent, countNumAbsent, countNumLate, countNumLOP, countTotal }
     }
 
     useEffect(() => {
         const getAllList = async () => {
-            setList(await getNameList())
-            setNumTotal(await getNumTotal())
-            setNumPresent(await getAmount("present"))
-            setNumAbsent(await getAmount("absent"))
-            setNumLate(await getAmount("late"))
-            setNumLeave(await getAmount("lop"))
+            await getInfo().then((data) => {
+                setNameList(data.keyData)
+                setInfo(data)
+            })
         }
 
         getAllList()
-        pb.collection(key).subscribe('*', function (e) {
+        pb.collection(key).subscribe('*', (e) => {
             getAllList()
         });
     }, [])
@@ -62,7 +55,7 @@ export default function ClassHome() {
     }
 
     return (
-        <>-
+        <>
             <center className="pt-[65px]">
                 <div className="mr-[1123px] bg-[#424345] w-[328px] h-[110px] rounded-t-[50px]">
                     <div className="tracking-widest text-white pt-[15px] text-[50px] font-semibold">
@@ -78,7 +71,7 @@ export default function ClassHome() {
                             <div className="ml-[1px]">Status</div>
                         </div>
                         <div className="overflow-y-scroll scrollbar-hide float-left w-[1000px] h-[360px] text-black text-[25px] font-bold">
-                            {list.map((item) => (
+                            {nameList.map((item) => (
                                 <StudentBar
                                     key={item.id}
                                     itemID={item.id}
@@ -98,15 +91,15 @@ export default function ClassHome() {
                             <span>CATEGORIES</span>
                             <span>AMOUNT</span>
                             <span className='font-semibold'>PRESENT</span>
-                            <span className='font-semibold'>{numPresent <= 9 ? "0" + numPresent : numPresent}</span>
+                            <span className='font-semibold'>{info.countNumPresent <= 9 ? "0" + info.countNumPresent : info.countNumPresent}</span>
                             <span className='font-semibold'>ABSENT</span>
-                            <span className='font-semibold'>{numAbsent <= 9 ? "0" + numAbsent : numAbsent}</span>
+                            <span className='font-semibold'>{info.countNumAbsent <= 9 ? "0" + info.countNumAbsent : info.countNumAbsent}</span>
                             <span className='font-semibold'>LATE</span>
-                            <span className='font-semibold'>{numLate <= 9 ? "0" + numLate : numLate}</span>
+                            <span className='font-semibold'>{info.countNumLate <= 9 ? "0" + info.countNumLate : info.countNumLate}</span>
                             <span className='font-semibold text-[16px] -mt-3 ml-1.5'>LEAVE ON PERMISSION</span>
-                            <span className='font-semibold'>{numLeave <= 9 ? "0" + numLeave : numLeave}</span>
+                            <span className='font-semibold'>{info.countNumLOP <= 9 ? "0" + info.countNumLOP : info.countNumLOP}</span>
                             <span className='font-semibold'>TOTAL</span>
-                            <span className='font-semibold'>{numTotal <= 9 ? "0" + numTotal : numTotal}</span>
+                            <span className='font-semibold'>{info.countTotal <= 9 ? "0" + info.countTotal : info.countTotal}</span>
                         </div>
                     </div>
                 </div>

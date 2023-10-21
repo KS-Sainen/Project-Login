@@ -29,7 +29,7 @@ export default function InfoPage() {
         }
 
         getImagePath()
-        pb.collection(key).subscribe('*', function (e) {
+        pb.collection(key).subscribe('*', (e) => {
             getImagePath()
         });
     }, [])
@@ -47,8 +47,19 @@ export default function InfoPage() {
                     <img src={img} width={121} height={121} className='rotate-[240deg] mr-6' />
                 </div>
             </nav>
-            <img src={imagePath} className='outline outline-[5px] h-[509px] w-[400px] mt-[45px] ml-[100px]'/>
-            <img />
+            <img src={imagePath} className='outline outline-[5px] h-[509px] mt-[45px] w-[400px] ml-[100px]' />
+            <div className='grid grid-cols-2 -mt-[500px] gap-[75px] text-2xl text-white tracking-tighter ml-[600px]'>
+                <div className='font-semibold'>NAME:</div>
+                <div className='-ml-[200px]'></div>
+                <div className='font-semibold'>CLASS:</div>
+                <div className=''></div>
+                <div className='font-semibold'>SCHOOL ID:</div>
+                <div className=''></div>
+                <div className='font-semibold'>PHONE NUMBER:</div>
+                <div className=''></div>
+                <div className='font-semibold'>TODAY'S STATUS:</div>
+                <div className=''></div>
+            </div>
         </>
     )
 }
