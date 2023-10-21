@@ -63,13 +63,13 @@ export default function InfoPage() {
                 <div className='font-semibold'>PHONE NUMBER:</div>
                 <div className='-ml-[100px]'>{info.phone_number}</div>
                 <div className='font-semibold'>TODAY'S STATUS:</div>
-                <select value={status} required onChange={(e) => {
-                    setStatus(e.target.value)
+                <select value={status} onChange={(e) => {
                     pb.collection(room).update(key, {
                         arrival_status: e.target.value
                     })
+                    setStatus(e.target.value)
                 }} className='text-black -ml-[100px] w-[300px]'>
-                    <option style={{display:"none"}}/>
+                    <option style={{ display: "none" }} />
                     <option value="present">PRESENT</option>
                     <option value="absent">ABSENT</option>
                     <option value="late">LATE</option>
