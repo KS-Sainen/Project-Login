@@ -23,14 +23,19 @@ export default function ClassHome() {
         let countNumLate = 0
         let countNumLOP = 0
         keyData.forEach((item) => {
-            if (item.arrival_status == "present") {
-                countNumPresent += 1
-            } else if (item.arrival_status == "absent") {
-                countNumAbsent += 1
-            } else if (item.arrival_status == "late") {
-                countNumLate += 1
-            } else if (item.arrival_status == "lop") {
-                countNumLOP += 1
+            switch (item.arrival_status) {
+                case "present":
+                    countNumPresent += 1
+                    break;
+                case "absent":
+                    countNumAbsent += 1
+                    break;
+                case "late":
+                    countNumLate += 1
+                    break;
+                case "lop":
+                    countNumLOP += 1
+                    break;
             }
         })
         return { keyData, countNumPresent, countNumAbsent, countNumLate, countNumLOP, countTotal }
