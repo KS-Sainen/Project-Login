@@ -14,6 +14,12 @@ export default function ClassHome() {
     const isLoggedIn = pb.authStore.isValid
     const roomLabel = key[0] + "." + key[1] + "/" + key[2]
 
+    if (!isLoggedIn) {
+        return (
+            window.location.href = "/class"
+        )
+    }
+
     const getInfo = async () => {
         const keyData = await pb.collection(key).getFullList({})
         keyData.sort((a, b) => a.number - b.number)
@@ -50,13 +56,13 @@ export default function ClassHome() {
         }
 
         getAllList()
-        pb.collection(key).subscribe('*', (e) => {
+        pb.collection(key).subscribe('*', function (e) {
             getAllList()
         });
     }, [])
 
     if (localStorage.getItem('classroom') != key) {
-        window.location.href = "/classoption"
+        window.location.href = "/class"
     }
 
     return (
@@ -80,10 +86,10 @@ export default function ClassHome() {
                                 <StudentBar
                                     key={item.id}
                                     itemID={item.id}
-                                    name={item.name.toUpperCase()}
-                                    surname={item.surname.toUpperCase()}
+                                    name={String(item.name).toUpperCase()}
+                                    surname={String(item.surname).toUpperCase()}
                                     number={item.number}
-                                    status={item.arrival_status == "lop" ? "LEAVE ON PERMISSION" : item.arrival_status.toUpperCase()}
+                                    status={item.arrival_status == "lop" ? "LEAVE ON PERMISSION" : String(item.arrival_status).toUpperCase()}
                                 />
                             ))}
                         </div>
