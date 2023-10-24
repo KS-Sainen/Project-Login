@@ -55,13 +55,13 @@ export default function InfoPage() {
             <img src={imagePath} className='outline outline-[5px] h-[509px] mt-[42.5px] w-[400px] ml-[100px]' />
             <div className='grid pb-10 grid-cols-2 -mt-[500px] gap-y-[75px] text-2xl text-white tracking-tighter ml-[600px]'>
                 <div className='font-semibold'>FULL NAME:</div>
-                <div className='-ml-[100px]'>{String(info.name).toUpperCase()}&nbsp;&nbsp;{String(info.surname).toUpperCase()}</div>
+                <div className='-ml-[100px] w-[550px]'>{String(info.name).toUpperCase()}&nbsp;&nbsp;{String(info.surname).toUpperCase()}</div>
                 <div className='font-semibold'>CLASS:</div>
-                <div className='-ml-[100px]'>{String(roomLabel).toUpperCase()}</div>
+                <div className='-ml-[100px] w-[550px]'>{String(roomLabel).toUpperCase()}</div>
                 <div className='font-semibold'>SCHOOL ID:</div>
-                <div className='-ml-[100px]'>{info.school_id}</div>
+                <div className='-ml-[100px] w-[550px]'>{info.school_id}</div>
                 <div className='font-semibold'>PHONE NUMBER:</div>
-                <div className='-ml-[100px]'>{info.phone_number}</div>
+                <div className='-ml-[100px] w-[550px]'>{info.phone_number}</div>
                 <div className='font-semibold'>TODAY'S STATUS:</div>
                 <select value={status} onChange={(e) => {
                     pb.collection(room).update(key, {

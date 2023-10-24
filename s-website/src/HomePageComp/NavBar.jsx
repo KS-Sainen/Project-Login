@@ -6,7 +6,7 @@ export default function NavBar() {
         <>
             <nav className='h-[150px] w-full bg-[#666666] bg-opacity-[46%]'>
                 <div className='ml-[107px] pt-[15px] flex'>
-                    <img src={img} width={121} height={121} />
+                    <img src={img} onClick={() => {}} width={121} height={121} />
                     <div className='self-center ml-[5px] text-3xl text-white font font-semibold'>SADTS</div>
                     <div className='flex mt-[44px] text-2xl ml-auto text-white font-thin items-center'>
                         <a href="#" className='mr-[150px] mb-9 cursor-pointer'>

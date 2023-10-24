@@ -81,7 +81,7 @@ export default function ClassHome() {
                             <div className="-ml-[48px]">Surname</div>
                             <div className="ml-[1px]">Status</div>
                         </div>
-                        <div className="overflow-y-scroll scrollbar-hide float-left w-[1000px] h-[360px] text-black text-[25px] font-bold">
+                        <div className="overflow-y-scroll overflow-x-hidden scrollbar-hide float-left w-[1000px] h-[360px] text-black text-[25px] font-bold">
                             {nameList.map((item) => (
                                 <StudentBar
                                     key={item.id}

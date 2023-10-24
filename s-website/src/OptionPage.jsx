@@ -30,7 +30,7 @@ export default function ClassChoice() {
     }
 
     const signOut = async () => {
-        await pb.authStore.clear()
+        pb.authStore.clear()
         window.location.href = "/signin"
     }
 
