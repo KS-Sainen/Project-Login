@@ -8,6 +8,10 @@ export default function ClassChoice() {
     const [classroom, setClassroom] = useState('')
     const [isLoading, setLoading] = useState(false)
 
+    function capitalize(s) {
+        return s && s[0].toUpperCase() + s.slice(1);
+    }
+
     const getClassroom = async (roomnumber) => {
         if (roomnumber.length == 0) {
             alert("Please Input Your Classroom")
@@ -15,9 +19,14 @@ export default function ClassChoice() {
             try {
                 setLoading(true)
                 const roomPath = roomnumber.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'')
-                const roomCheck = await pb.collection(roomPath).getList()
-                localStorage.setItem('classroom', roomPath)
-                window.location.href = `/class/${roomPath}`
+                const userClass = pb.authStore.model.classroom.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'')
+
+                if (userClass == capitalize(roomPath) || pb.authStore.model.role == "admin") {
+                    window.location.href = `/class/${capitalize(roomPath)}`
+                } else {
+                    alert("No Access")
+                }
+
             } catch (e) {
                 alert("Classroom Not Found")
             }

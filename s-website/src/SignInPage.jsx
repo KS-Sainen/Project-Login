@@ -14,22 +14,13 @@ export default function SignIn() {
         setLoading(true)
         try {
             const authData = await pb
-                .collection('users')
+                .collection('Users')
                 .authWithPassword(Email, Password)
         } catch (e) {
-            //validation(Email, Password)
+            console.log(e)
         }
         setLoading(false)
     }
-
-    /*const validation = async(Email, Password) => {
-        if (Email.length == 0) {
-            alert("Please Enter Your Email")
-        } else if (Password.length == 0) {
-            alert("Please Enter Your Password")
-        }
-    }*/
-
 
     if (isLoggedIn) {
         return (

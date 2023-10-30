@@ -61,10 +61,6 @@ export default function ClassHome() {
         });
     }, [])
 
-    if (localStorage.getItem('classroom') != key) {
-        window.location.href = "/class"
-    }
-
     return (
         <>
             <center className="pt-[65px]">

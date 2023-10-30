@@ -11,35 +11,39 @@ export default function SignUp() {
     const [password, setPassword] = useState()
     const [passwordConfirm, setPasswordConfirm] = useState()
 
+    const [invalidFirstName, setInvalidFirstName] = useState(false)
+
     const isLoggedIn = pb.authStore.isValid
 
-    function capitalize(s)
-{
-    return s && s[0].toUpperCase() + s.slice(1);
-}
+    function capitalize(s) {
+        return s && s[0].toUpperCase() + s.slice(1);
+    }
 
     const signUp = async (FirstName, MiddleName, LastName, Email, Password, PasswordConfirm) => {
-        setLoading(true)
-        try {
-            const data = {
-                "username": capitalize(FirstName)+capitalize(LastName),
-                "email": Email,
-                "password": Password,
-                "passwordConfirm": PasswordConfirm,
-                "firstName": capitalize(FirstName),
-                "middleName": capitalize(MiddleName),
-                "lastName": capitalize(LastName),
-                "role": "visitor",
-            };
-            const record = await pb
-                .collection('Users')
-                .create(data)
-            alert("Account Created Successfully")
-            window.location.href = "/signin"
-        } catch (error) {
-            alert("Account Creation Failed")
+        const nameRegex = /^[a-zA-Z]+$/;
+        if (!nameRegex.test(FirstName) || FirstName.length == 0 || FirstName == null || FirstName == undefined || FirstName == " ") {
+            setInvalidFirstName(true)
+        } else {
+            try {
+                const data = {
+                    "username": capitalize(FirstName) + capitalize(LastName),
+                    "email": Email,
+                    "password": Password,
+                    "passwordConfirm": PasswordConfirm,
+                    "firstName": capitalize(FirstName),
+                    "middleName": capitalize(MiddleName),
+                    "lastName": capitalize(LastName),
+                    "role": "visitor",
+                };
+                const record = await pb
+                    .collection('Users')
+                    .create(data)
+                alert("Account Created Successfully")
+                window.location.href = "/signin"
+            } catch (error) {
+                alert("Account Creation Failed, please contact the administrator")
+            }
         }
-        setLoading(false)
     }
 
     if (isLoggedIn) {
@@ -67,63 +71,84 @@ export default function SignUp() {
                     </div>
                 </div>
             </nav>
-            <center className='h-[79.9vh] overflow-y-auto'>
+            <div className='h-[79.9vh] flex justify-center overflow-y-auto'>
                 <div className="pt-[50px]">
-                    <input
-                        type="text"
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="First Name"
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        onChange={(e) => setMiddleName(e.target.value)}
-                        className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="Middle Name (Optional)"
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="Last Name"
+                    <div className=''>
+                        {invalidFirstName ?
+                            <> {/*If Invalid first name (ternary operator)*/}
+                                <input
+                                    type="text"
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-red-500 rounded-xl text-white placeholder-red-500"
+                                    placeholder="First Name"
+                                />
+                                <div className='text-red-500 mt-3'>
+                                    Please check the following:<br />
+                                    - First name cannot be blank.<br/>
+                                    - First name must be written in English.<br/>
+                                    - First name cannot contain special characters.
+                                </div>
+                            </>
+                            :
+                            <>
+                                <input
+                                    type="text"
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className="font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                                    placeholder="First Name"
+                                />
+                                <div></div>
+                            </>
+                        }
+                        <input
+                            type="text"
+                            onChange={(e) => setMiddleName(e.target.value)}
+                            className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                            placeholder="Middle Name (Optional)"
+                        />
+                        <br />
+                        <input
+                            type="text"
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                            placeholder="Last Name"
 
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="mt-[40px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="Email Address"
+                        />
+                        <br />
+                        <input
+                            type="text"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="mt-[40px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                            placeholder="Email Address"
 
-                    />
-                    <br />
-                    <input
-                        type="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        className=" mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="Password"
+                        />
+                        <br />
+                        <input
+                            type="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            className=" mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                            placeholder="Password"
 
-                    />
-                    <br />
-                    <input
-                        type="password"
-                        onChange={(e) => setPasswordConfirm(e.target.value)}
-                        className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
-                        placeholder="Confirm Password"
+                        />
+                        <br />
+                        <input
+                            type="password"
+                            onChange={(e) => setPasswordConfirm(e.target.value)}
+                            className="mt-[20px] font-thin tracking-widest w-[445px] px-[20px] py-3 bg-transparent border border-white rounded-xl text-white placeholder-white"
+                            placeholder="Confirm Password"
 
-                    />
+                        />
+                    </div>
                     <br />
-                    <button type="submit" onClick={() => signUp(firstname, middlename, lastname, email, password, passwordConfirm)} className="mt-[50px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
+                    <button type="submit" onClick={() => signUp(firstname, middlename, lastname, email, password, passwordConfirm)} className="mt-[20px] bg-[#F95959] outline-[#F95959] outline text-white text-[15px] font-bold rounded-lg py-3 px-[190px]">
                         {isLoading ? 'LOADING...' : 'SIGN UP'}
                     </button>
                     <a href="signin" className='underline text-white'>
-                        <div className='mt-8'>Already have an account? Sign In</div>
+                        <div className='mt-8 flex justify-center'>Already have an account? Sign In</div>
                     </a>
                     <div className='pt-[50px]'></div>
                 </div>
-            </center>
+            </div>
         </>
     )
 }
