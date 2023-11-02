@@ -63,6 +63,7 @@ export default function InfoPage() {
                 <div className='font-semibold'>PHONE NUMBER:</div>
                 <div className='-ml-[100px] w-[550px]'>{info.phone_number}</div>
                 <div className='font-semibold'>TODAY'S STATUS:</div>
+
                 <select value={status} onChange={(e) => {
                     pb.collection(room).update(key, {
                         arrival_status: e.target.value
