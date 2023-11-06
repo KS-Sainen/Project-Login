@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import App from "./HomePage.jsx"
+import App from "./HomePageComp/HomePage.jsx"
 import "./index.css"
 import SignIn from "./SignInPage.jsx"
 import ClassChoice from "./OptionPage.jsx"

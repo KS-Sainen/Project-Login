@@ -8,7 +8,8 @@ export default function NavBar() {
         <div className="flex items-center pl-2 lg:pl-16">
           <img
             src={img}
-            onClick={() => {}}
+            onClick={() => {
+              window.location.href = "/";}}
             className="w-16 h-16 lg:w-[121px] lg:h-[121px]"
           />
           <div className="ml-2 lg:ml-4 text-xl lg:text-4xl text-white font font-semibold">
