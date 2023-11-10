@@ -68,21 +68,21 @@ export default function ClassHome() {
 
   return (
     <>
-      <center className="pt-[65px]">
-        <div className="mr-[1123px] bg-[#424345] w-[328px] h-[110px] rounded-t-[50px]">
-          <div className="tracking-widest text-white pt-[15px] text-[50px] font-semibold">
+      <center className="pt-8 xl:pt-16">
+        <div className="mr-[222px] xl:mr-[1123px] bg-[#424345] w-[128px] h-[50px] xl:w-[328px] xl:h-[110px] rounded-t-[30px] xl:rounded-t-[50px]">
+          <div className="tracking-widest text-white pt-3 xl:pt-8 text-2xl xl:text-5xl font-semibold">
             {roomLabel.toUpperCase()}
           </div>
         </div>
-        <div className="bg-[#5A5B5C] w-[1450px] h-[500px] rounded-tr-[50px] rounded-b-[50px]">
-          <div className="float-left w-[1000px] h-[440px] mt-[30px] outline-[#D9D9D9] outline text-black text-[25px] py-2 font-bold rounded-2xl ml-[25px]">
-            <div className="float-left text-left grid grid-cols-4 gap-56 mt-[10px] bg-gray-300 outline-[#D9D9D9] w-[950px] outline text-gray-500 text-[20px] py-2 font-bold rounded-2xl pr-[80px] pl-5 ml-[25px] mb-3">
-              <div className="ml-[45px]">No.</div>
-              <div className="-ml-[75px]">Name</div>
-              <div className="-ml-[48px]">Surname</div>
-              <div className="ml-[1px]">Status</div>
+        <div className="bg-[#5A5B5C] w-[350px] h-[700px] xl:w-[1450px] xl:h-[500px] rounded-tr-[50px] rounded-b-[50px]">
+          <div className="float-left w-[290px] h-[340px] xl:w-[1000px] xl:h-[440px] mt-[30px] outline-[#D9D9D9] outline text-black text-xs xl:text-2xl py-2 font-bold rounded-2xl ml-[25px]">
+            <div className="float-left text-left grid grid-cols-4 gap-10 xl:gap-56 mt-[10px] bg-gray-300 outline-[#D9D9D9] w-[250px] xl:w-[950px] outline text-gray-500 text-xs xl:text-2xl py-2 font-bold rounded-2xl pr-[80px] pl-5 ml-[25px] mb-3">
+              <div className="-ml-1 xl:ml-[45px]">No.</div>
+              <div className="-ml-5 xl:-ml-[75px]">Name</div>
+              <div className="ml-1 xl:-ml-[48px]">Surname</div>
+              <div className="ml-10 xl:ml-[1px]">Status</div>
             </div>
-            <div className="overflow-y-scroll overflow-x-hidden scrollbar-hide float-left w-[1000px] h-[360px] text-black text-[25px] font-bold">
+            <div className="overflow-y-scroll overflow-x-hidden scrollbar-hide w-[290px] h-[340px] xl:w-[1000px] xl:h-[360px] text-black text-xs xl:text-2xl font-bold ">
               {nameList.map((item) => (
                 <StudentBar
                   key={item.id}
@@ -101,11 +101,11 @@ export default function ClassHome() {
           </div>
 
           {/*activity box*/}
-          <div className="bg-[#D9D9D9] w-[300px] h-[450px] float-right mr-[60px] mt-[25px] rounded-3xl">
-            <div className="text-xl mt-5 font-extrabold">
+          <div className="bg-[#D9D9D9] w-[320px] h-[270px] xl:w-[300px] xl:h-[450px] float-right mr-[17px] xl:mr-[60px] mt-[30px] xl:mt-[25px] rounded-3xl">
+            <div className="text-sm xl:text-xl mt-4 xl:mt-5 font-extrabold">
               STUDENT ATTENDANCE
             </div>
-            <div className="grid gap-y-[30px] grid-cols-2 text-lg mt-10 font-bold">
+            <div className="grid gap-y-[20px] xl:gap-y-[30px] grid-cols-2 text-xs xl:text-xl mt-5 xl:mt-10 font-bold">
               <span>CATEGORIES</span>
               <span>AMOUNT</span>
               <span className="font-semibold">PRESENT</span>
@@ -126,7 +126,7 @@ export default function ClassHome() {
                   ? "0" + info.countNumLate
                   : info.countNumLate}
               </span>
-              <span className="font-semibold text-[16px] -mt-3 ml-1.5">
+              <span className="font-semibold text-xs xl:text-[16px] xl:-mt-3 ml-1.5">
                 LEAVE ON PERMISSION
               </span>
               <span className="font-semibold">
