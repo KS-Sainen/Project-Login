@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import img from "../public/icon.png";
 import pb from "./database/pb.js";
 import React from "react";
 import { useEffect, useState } from "react";
+import iconRevert from "../public/icon_revert.png";
+import icon from "../public/icon.png";
 
 export default function InfoPage() {
   const { room } = useParams();
@@ -46,64 +47,73 @@ export default function InfoPage() {
     });
   }, []);
 
+  const data = [
+    [
+      "FULL NAME",
+      `${String(info.name).toUpperCase()} ${String(
+        info.surname
+      ).toUpperCase()}`,
+    ],
+    ["CLASS", String(roomLabel).toUpperCase()],
+    ["SCHOOL ID", info.school_id],
+    ["PHONE NUMBER", info.phone_number],
+  ];
+
   return (
     <>
-      <nav className="h-[150px] w-full bg-[#59A3F9]">
-        <div className="pt-[15px] flex">
-          <img src={img} width={121} height={121} className="ml-6" />
-          <div className="grid grid-rows-2 gap-y-5">
-            <div className="self-center text-center ml-[360px] text-3xl text-white font font-semibold tracking-widest">
-              Student Arrival & Departure System
-            </div>
-            <div className="self-center text-center ml-[360px] text-2xl text-white font-thin">
-              Student Identification
+      <nav className="h-20 lg:h-[150px] w-full bg-[#59A3F9] flex items-center justify-between">
+        <div className="items-center lg:pt-[15px] flex justify-between w-full mx-2 lg:mx-10">
+          <img src={icon} className="w-12 h-12 lg:w-[121px] lg:h-[121px]" />
+          <div className="flex items-center">
+            <div className="flex flex-col gap-y-1 lg:gap-y-5 items-center justify-center">
+              <div className="text-center  text-base lg:text-3xl text-white font font-semibold tracking-normal lg:tracking-widest">
+                Student Arrival & Departure System
+              </div>
+              <div className="text-center text-sm lg:text-2xl text-white font-thin">
+                Student Identification
+              </div>
             </div>
           </div>
-          <div className="flex mt-[44px] text-2xl ml-auto text-white text-center"></div>
+          <img />
           <img
-            src={img}
-            width={121}
-            height={121}
-            className="rotate-[240deg] mr-6"
+            src={iconRevert}
+            className="w-12 h-12 lg:w-[121px] lg:h-[121px]"
           />
         </div>
       </nav>
-      <img
-        src={imagePath}
-        className="outline outline-[5px] h-[509px] mt-[42.5px] w-[400px] ml-[100px]"
-      />
-      <div className="grid pb-10 grid-cols-2 -mt-[500px] gap-y-[75px] text-2xl text-white tracking-tighter ml-[600px]">
-        <div className="font-semibold">FULL NAME:</div>
-        <div className="-ml-[100px] w-[550px]">
-          {String(info.name).toUpperCase()}&nbsp;&nbsp;
-          {String(info.surname).toUpperCase()}
-        </div>
-        <div className="font-semibold">CLASS:</div>
-        <div className="-ml-[100px] w-[550px]">
-          {String(roomLabel).toUpperCase()}
-        </div>
-        <div className="font-semibold">SCHOOL ID:</div>
-        <div className="-ml-[100px] w-[550px]">{info.school_id}</div>
-        <div className="font-semibold">PHONE NUMBER:</div>
-        <div className="-ml-[100px] w-[550px]">{info.phone_number}</div>
-        <div className="font-semibold">TODAY'S STATUS:</div>
 
-        <select
-          value={status}
-          onChange={(e) => {
-            pb.collection(room).update(key, {
-              arrival_status: e.target.value,
-            });
-            setStatus(e.target.value);
-          }}
-          className="text-black -ml-[100px] w-[300px]"
-        >
-          <option style={{ display: "none" }} />
-          <option value="present">PRESENT</option>
-          <option value="absent">ABSENT</option>
-          <option value="late">LATE</option>
-          <option value="lop">LEAVE ON PERMISSION</option>
-        </select>
+      <div className="flex flex-1 flex-col lg:flex-row w-full h-full text-white items-center">
+        <img
+          src={imagePath}
+          className="outline outline-black lg:outline-[5px] h-[200px] lg:h-[509px] mt-7 lg:mt-[42.5px] w-[160px] lg:w-[400px] ml-5 lg:ml-[100px]"
+        />
+        <div className="flex flex-col mx-0 lg:mx-20 my-20 lg:my-0 space-y-10">
+          {data.map((item) => (
+            <div className="flex space-x-6">
+              <div className="font-semibold">{item[0]}:</div>
+              <div>{item[1]}</div>
+            </div>
+          ))}
+          <div className="flex space-x-6">
+            <div className="font-semibold">TODAY'S STATUS:</div>
+            <select
+              value={status}
+              onChange={(e) => {
+                pb.collection(room).update(key, {
+                  arrival_status: e.target.value,
+                });
+                setStatus(e.target.value);
+              }}
+              className="text-black"
+            >
+              <option style={{ display: "none" }} />
+              <option value="present">PRESENT</option>
+              <option value="absent">ABSENT</option>
+              <option value="late">LATE</option>
+              <option value="lop">LEAVE ON PERMISSION</option>
+            </select>
+          </div>
+        </div>
       </div>
     </>
   );
