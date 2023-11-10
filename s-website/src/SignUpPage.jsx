@@ -37,11 +37,11 @@ export default function SignUp() {
     const emailRegex = /\S+@\S+\.\S+/;
 
     //Email Check
-    !emailRegex.test(Email) || Email == null || Email == undefined
+    !emailRegex.test(Email)
       ? setInvalidEmailAddress(true)
       : setInvalidEmailAddress(false);
     // First Name Check
-    !nameRegex.test(FirstName) || FirstName == null || FirstName == undefined
+    !nameRegex.test(FirstName)
       ? setInvalidFirstName(true)
       : setInvalidFirstName(false);
     // Middle Name Check
@@ -51,7 +51,7 @@ export default function SignUp() {
     if (MiddleName == null || MiddleName == undefined || MiddleName == "")
       setInvalidMiddleName(false);
     // Last Name Check
-    !nameRegex.test(LastName) || LastName == null || LastName == undefined
+    !nameRegex.test(LastName)
       ? setInvalidLastName(true)
       : setInvalidLastName(false);
     // Password Check
@@ -62,7 +62,6 @@ export default function SignUp() {
     PasswordConfirm.length < 5 ||
     PasswordConfirm == null ||
     PasswordConfirm == undefined ||
-    PasswordConfirm == " " ||
     PasswordConfirm != Password
       ? setInvalidConfirmPassword(true)
       : setInvalidConfirmPassword(false);

@@ -1,6 +1,6 @@
-import React from 'react'
-import NavBar from './NavBar.jsx'
-import TextAndSign from './IntroPage.jsx'
+import React from "react";
+import NavBar from "./NavBar.jsx";
+import TextAndSign from "./IntroPage.jsx";
 
 export default function App() {
   return (
@@ -8,5 +8,5 @@ export default function App() {
       <NavBar />
       <TextAndSign />
     </>
-  )
+  );
 }

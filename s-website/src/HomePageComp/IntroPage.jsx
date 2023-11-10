@@ -6,7 +6,7 @@ export default function TextAndSign() {
           <div className="mt-5 mb-1 lg:mb-5 lg:mt-10 font-light text-xl lg:text-3xl">
             Welcome!
           </div>
-          <div className="  font-medium text-3xl lg:text-5xl mb-2 lg:mb-3" >
+          <div className="  font-medium text-3xl lg:text-5xl mb-2 lg:mb-3">
             Student Arrival
             <br />& Departure Time
             <br />
