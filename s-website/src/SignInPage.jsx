@@ -14,7 +14,6 @@ export default function SignIn() {
   const isLoggedIn = pb.authStore.isValid;
 
   const signIn = async (Email, Password) => {
-    setLoading(true);
     const emailRegex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
 
     !emailRegex.test(Email)
@@ -25,12 +24,15 @@ export default function SignIn() {
       ? setInvalidPassword(true)
       : setInvalidPassword(false);
 
-    if (!(invalidEmailAddress && invalidPassword)) {
-      const authData = await pb
-        .collection("Users")
-        .authWithPassword(Email, Password);
+    if (!invalidEmailAddress && !invalidPassword) {
+      try {
+        const authData = await pb
+          .collection("Users")
+          .authWithPassword(Email, Password);
+      } catch (e) {
+        alert("User data is either blank or not found. Please check your email and password.");
+      }
     }
-    setLoading(false);
   };
 
   if (isLoggedIn) {
