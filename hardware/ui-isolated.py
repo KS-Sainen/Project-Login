@@ -66,6 +66,7 @@ studentGrid.height = mainH - dM
 # Image Display and Overlay
 pictureDisplay = Box(pictureGrid,border=5,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left")
 pictureDisplay.bg = bgW
+# pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="C:\\Users\\kansr\\Desktop\\sourcecode_s12\\fillerbg.png")
 
 #Callbacks
 def updateTime():
