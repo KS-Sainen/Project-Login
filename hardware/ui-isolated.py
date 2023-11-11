@@ -1,6 +1,7 @@
 from time import sleep
 from datetime import datetime
 from guizero import App, Text, PushButton, Drawing, Box, Picture
+from picamera import PiCamera
 freq = 30
 margin = 15
 dM = margin * 2
@@ -64,16 +65,32 @@ buttonReject.text_color = textW
 buttonReject.text_size	= 16
 studentGrid.height = mainH - dM
 # Image Display and Overlay
-pictureDisplay = Box(pictureGrid,border=5,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left")
-pictureDisplay.bg = bgW
-# pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="C:\\Users\\kansr\\Desktop\\sourcecode_s12\\fillerbg.png")
+#pictureDisplay = Box(pictureGrid,border=5,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left")
+#pictureDisplay.bg = bgW
+pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="/home/sainen/Downloads/Project-Login/hardware/fillerbg.png")
+
+camera = PiCamera(resolution=(1280, 720), framerate=30)
+# Set ISO to the desired value
+camera.iso = 100
+# Wait for the automatic gain control to settle
+sleep(2)
+# Now fix the values
+camera.shutter_speed = camera.exposure_speed
+camera.exposure_mode = 'off'
+g = camera.awb_gains
+camera.awb_mode = 'off'
+camera.awb_gains = g
 
 #Callbacks
 def updateTime():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     timeText.value = current_time
+def updateImg():
+    camera.capture('fillerbg.png')
+    pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/fillerbg.png"
 timeText.repeat(1000,updateTime)
+pictureDisplay.repeat(1000/freq,updateImg)
 
 #Await Server login
 
