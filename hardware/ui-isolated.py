@@ -4,7 +4,7 @@ from guizero import App, Text, PushButton, Drawing, Box, Picture
 freq = 30
 margin = 15
 dM = margin * 2
-aH = 480
+aH = 420
 aW = 800
 clockH = 80
 clockW = 450
