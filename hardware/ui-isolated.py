@@ -35,13 +35,19 @@ sz = [0,0,0,0]
 updateArr = []
 encodings = []
 client = PocketBase('https://sadtsdatamanage.pockethost.io')
+#auth
+try:
+    authData = client.collection('users').auth_with_password('sadtsdatamanage@gmail.com', '12345');
+    print(client.auth_store.token)
+    print(client.auth_store.model.id)
+except:
+    print("Authentication Error")
 collection = "M64"
 resultList = client.collection("M64").get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
 #get picture 0 of every student in every room
 for i in range(4):
     resultList = client.collection("M6"+str(room)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
     for j in resultList.items:
-        encodings.append([])
         try:
             url = "http://sadtsdatamanage.pockethost.io/api/files/"+getRoom(6,room)+"/"+j.id+"/"+j.pictures[0]
             r = requests.get(url, allow_redirects=True)
@@ -58,11 +64,8 @@ indx = 0
 #Load Encodings
 for i in updateArr:
     try:
-        f = open("e"+str(i)+".txt","r")
-        raw_text = f.read()
-        raw_arr = raw_text.split(",")
-        for j in raw_arr:
-            encodings[i].append(float(j))
+        f = open("e"+str(i)+".npy","rb")
+        encodings.append(np.load(f))
         # for j in encodings:
         #     print(i)
         print("E"+str(i))
@@ -71,9 +74,56 @@ for i in updateArr:
         print("FRE"+str(i))
     indx+=1
 print("Loaded Encodings")
+#Face Recognition
+#Calculates the room and place in db of that room
+def getRoom(x):
+    if x == -1:
+        return -1
+    ret = 1
+    for i in sz:
+        if i > x:
+            return ret
+        ret += 1
+    return 4
+def getIndex(x,r):
+    if x==-1:
+        return -1
+    if r==1:
+        return x
+    else:
+        return abs(x-sz[r-2])
+#Returns a record of the detected student
+def faceReg():
+    global isDetect
+    studentAns = -1
+    f = face_recognition.load_image_file("dispimage.png")
+    face_locations = face_recognition.face_locations(f)
+    face_encodings = face_recognition.face_encodings(f, face_locations)
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        matches = []
+        face_distances = []
+        matches.append(face_recognition.compare_faces(encodings, face_encoding))
+        face_distances.append(face_recognition.face_distance(encodings, face_encoding))
+        if True in matches:
+            studentAns = matches.index(True)
+        else:
+            studentAns = np.argmin(face_distances)
+            #dist = face_distances[studentAns]
+    if studentAns != -1:
+        studentAns = updateArr[studentAns]
+        roomAns = getRoom(studentAns)
+        indexAns = getIndex(studentAns,roomAns)
+        isDetect = True
+        return client.collection(getroom(6,roomAnd)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})[indexAns]
+    else:
+        isDetect = False
+
 
 # Build the UI
 # Masters, [x,y]
+isDetect = False
+detectR = {}
 # Grids
 app = App(height=aH,width=aW,title="SADTS",layout="grid",bg=bgC)
 marginR = Box(app,border=0,width=margin,height=margin,grid=[0,0],align="left")
@@ -120,6 +170,7 @@ studentGrid.height = mainH - dM
 #pictureDisplay.bg = bgW
 pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="/home/sainen/Downloads/Project-Login/hardware/fillerbg.png")
 
+#Camera
 camera = Picamera2()
 config = camera.create_preview_configuration({"size":(pictureW-dM,mainH-dM)})
 camera.configure(config)
@@ -133,8 +184,16 @@ def updateTime():
 def updateImg():
     camera.capture_file("dispimage.png")
     pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/dispimage.png"
+def updateDispText():
+    global detectR
+    detectR = faceReg()
+    if isDetect:
+        textConfr.text = "Student Name : " + detectR.name + " " + detectR.surname
+    else:
+        textConfr.text = "Student Name : N/A"
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
+textConfr.repeat(250,updateDispText)
 #camera.capture_file("fillerbg.png")
 
 #Await Server login
