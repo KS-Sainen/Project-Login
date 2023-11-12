@@ -3,18 +3,9 @@ from pocketbase.client import FileUpload
 import face_recognition
 import requests
 import time
+import numpy as np
 def getRoom(g,r):
     return "M"+str(g)+str(r)
-def getStrList(arr):
-    res = ""
-    a = arr[0]
-    sz = 0
-    for i in a:
-        sz += 1
-        res += str(i)
-        if sz < len(a):
-            res += ","
-    return res
 room = 1
 student = 0
 em = 0
@@ -55,9 +46,9 @@ client.auth_store.clear()
 for i in updateArr:
     try:
         image = face_recognition.load_image_file('s'+str(i)+'.png')
-        encoding = face_recognition.face_encodings(image)
-        f = open("e"+str(i)+".txt", 'w')
-        f.write(getStrList(encoding))
+        encoding = face_recognition.face_encodings(image)[0]
+        f = open("e"+str(i)+".npy", 'wb')
+        np.save(f,encoding)
         f.close()
     except:
         print("Identification Error at student " + str(i))

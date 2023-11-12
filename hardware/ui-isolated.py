@@ -1,3 +1,7 @@
+from pocketbase import PocketBase  # Client also works the same
+from pocketbase.client import FileUpload
+import face_recognition
+import requests
 from time import sleep
 from datetime import datetime
 from guizero import App, Text, PushButton, Drawing, Box, Picture
@@ -20,6 +24,53 @@ bgC = "#242528"
 isButtonPress = False
 def dummyFunc():
     return 0
+
+#Serverwork
+def getRoom(g,r):
+    return "M"+str(g)+str(r)
+room = 1
+student = 0
+em = 0
+sz = [0,0,0,0]
+updateArr = []
+encodings = []
+client = PocketBase('https://sadtsdatamanage.pockethost.io')
+collection = "M64"
+resultList = client.collection("M64").get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
+#get picture 0 of every student in every room
+for i in range(4):
+    resultList = client.collection("M6"+str(room)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
+    for j in resultList.items:
+        encodings.append([])
+        try:
+            url = "http://sadtsdatamanage.pockethost.io/api/files/"+getRoom(6,room)+"/"+j.id+"/"+j.pictures[0]
+            r = requests.get(url, allow_redirects=True)
+            open('s'+str(student)+'.png', 'wb').write(r.content)
+            updateArr.append(student)
+        except:
+            #print("No Image?")
+            em += 1
+        student += 1
+    sz[room-1]=student
+    room += 1
+print("Students Image Checked\nEmpty Count : " + str(em) + "\nTotal Count : " + str(student))
+indx = 0
+#Load Encodings
+for i in updateArr:
+    try:
+        f = open("e"+str(i)+".txt","r")
+        raw_text = f.read()
+        raw_arr = raw_text.split(",")
+        for j in raw_arr:
+            encodings[i].append(float(j))
+        # for j in encodings:
+        #     print(i)
+        print("E"+str(i))
+        f.close()
+    except:
+        print("FRE"+str(i))
+    indx+=1
+print("Loaded Encodings")
 
 # Build the UI
 # Masters, [x,y]
