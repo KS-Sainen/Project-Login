@@ -1,5 +1,6 @@
 from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
+import numpy as np
 import face_recognition
 import requests
 from time import sleep
@@ -76,7 +77,7 @@ for i in updateArr:
 print("Loaded Encodings")
 #Face Recognition
 #Calculates the room and place in db of that room
-def getRoom(x):
+def getRoomAns(x):
     if x == -1:
         return -1
     ret = 1
@@ -93,7 +94,13 @@ def getIndex(x,r):
     else:
         return abs(x-sz[r-2])
 #Returns a record of the detected student
+roomAns = 0
+isDetect = False
+detectR = {}
+indexAns = 0
 def faceReg():
+    global roomAns
+    global indexAns
     global isDetect
     studentAns = -1
     f = face_recognition.load_image_file("dispimage.png")
@@ -112,18 +119,14 @@ def faceReg():
             #dist = face_distances[studentAns]
     if studentAns != -1:
         studentAns = updateArr[studentAns]
-        roomAns = getRoom(studentAns)
+        roomAns = getRoomAns(studentAns)
         indexAns = getIndex(studentAns,roomAns)
         isDetect = True
-        return client.collection(getroom(6,roomAnd)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})[indexAns]
     else:
         isDetect = False
 
-
 # Build the UI
 # Masters, [x,y]
-isDetect = False
-detectR = {}
 # Grids
 app = App(height=aH,width=aW,title="SADTS",layout="grid",bg=bgC)
 marginR = Box(app,border=0,width=margin,height=margin,grid=[0,0],align="left")
@@ -186,14 +189,17 @@ def updateImg():
     pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/dispimage.png"
 def updateDispText():
     global detectR
-    detectR = faceReg()
+    faceReg()
+    detectR = client.collection(getRoom(6,roomAns)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
+    detectR = (detectR.items)[indexAns]
     if isDetect:
-        textConfr.text = "Student Name : " + detectR.name + " " + detectR.surname
+        print("saa! saa! mikkoku da! " + str(indexAns) + "/" +  str(roomAns))
+        textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
     else:
-        textConfr.text = "Student Name : N/A"
+        textConfr.value = "Student Name : N/A"
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
-textConfr.repeat(250,updateDispText)
+textConfr.repeat(2500,updateDispText)
 #camera.capture_file("fillerbg.png")
 
 #Await Server login
