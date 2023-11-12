@@ -80,8 +80,8 @@ def updateTime():
     current_time = now.strftime("%H:%M:%S")
     timeText.value = current_time
 def updateImg():
-    camera.capture_file("fillerbg.png")
-    pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/fillerbg.png"
+    camera.capture_file("dispimage.png")
+    pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/dispimage.png"
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
 #camera.capture_file("fillerbg.png")
