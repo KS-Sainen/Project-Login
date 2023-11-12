@@ -187,10 +187,13 @@ def invalidateSelection():
     textConfr.value = "Student Name : N/A"
 def confirmSelection():
     global detectR
+    global isDetect
     if isDetect:
         now = datetime.now()
-        current_time = now.strftime("%Y-%m-%d %H:%M:%S.123Z")
+        current_time = str(now.strftime("%Y-%m-%d %H:%M:%S.123Z"))
         minutes = 60*now.hour + now.minute
+        detectR.created = detectR.created.strftime("%Y-%m-%d %H:%M:%S.123Z")
+        detectR.updated = detectR.updated.strftime("%Y-%m-%d %H:%M:%S.123Z")
         if minutes >= (15*60 + 15) and (detectR.arrival_status == "late" or detectR.arrival_status == "present"):
             detectR.departure_time = current_time
         elif minutes >= (7*60 + 50):
@@ -199,7 +202,8 @@ def confirmSelection():
         else:
             detectR.arrival_status = "present"
             detectR.arrival_time = current_time
-        client.collection(getRoom(6,roomAns)).update(detectR.id,detectR)
+        print(detectR.__dict__)
+        client.collection("M64").update(detectR.id,detectR.__dict__)
         print("Time checked!")
         isDetect = False
 def updateTime():
@@ -222,6 +226,8 @@ def updateDispText():
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
 textConfr.repeat(2500,updateDispText)
+buttonConfirm.update_command(confirmSelection)
+buttonReject.update_command(invalidateSelection)
 #camera.capture_file("fillerbg.png")
 
 #Await Server login
