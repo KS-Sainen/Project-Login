@@ -1,6 +1,7 @@
 from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
 import face_recognition
+from datetime import datetime
 import requests
 import time
 import numpy as np
@@ -27,6 +28,23 @@ resultList = client.collection("M64").get_list(1, 50, {"filter": 'created >= "20
 for i in range(4):
     resultList = client.collection("M6"+str(room)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
     for j in resultList.items:
+        try:
+            j.created = j.created.strftime("%Y-%m-%d %H:%M:%S.123Z")
+            j.updated = j.updated.strftime("%Y-%m-%d %H:%M:%S.123Z")
+            if j.arrival_status == "absent" or j.arrival_time=="":
+                pass
+            else:
+                now = datetime.now()
+                datestr = j.arrival_time
+                print(datestr)
+                dateNum = int(datestr[8:10])
+                print("Day = "+str(dateNum))
+                if dateNum != now.day:
+                    j.arrival_status = "absent"
+                    j.arrival_time = ""
+                    client.collection("M64").update(j.id,j.__dict__)
+        except:
+            print("no date updating")
         try:
             url = "http://sadtsdatamanage.pockethost.io/api/files/"+getRoom(6,room)+"/"+j.id+"/"+j.pictures[0]
             r = requests.get(url, allow_redirects=True)
