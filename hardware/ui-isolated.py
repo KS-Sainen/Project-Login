@@ -1,7 +1,7 @@
 from time import sleep
 from datetime import datetime
 from guizero import App, Text, PushButton, Drawing, Box, Picture
-from picamera import PiCamera
+from picamera2 import Picamera2
 freq = 30
 margin = 15
 dM = margin * 2
@@ -69,28 +69,22 @@ studentGrid.height = mainH - dM
 #pictureDisplay.bg = bgW
 pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="/home/sainen/Downloads/Project-Login/hardware/fillerbg.png")
 
-camera = PiCamera(resolution=(1280, 720), framerate=30)
-# Set ISO to the desired value
-camera.iso = 100
-# Wait for the automatic gain control to settle
-sleep(2)
-# Now fix the values
-camera.shutter_speed = camera.exposure_speed
-camera.exposure_mode = 'off'
-g = camera.awb_gains
-camera.awb_mode = 'off'
-camera.awb_gains = g
-
+camera = Picamera2()
+config = camera.create_preview_configuration({"size":(pictureW-dM,mainH-dM)})
+camera.configure(config)
+camera.start()
+sleep(1)
 #Callbacks
 def updateTime():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     timeText.value = current_time
 def updateImg():
-    camera.capture('fillerbg.png')
+    camera.capture_file("fillerbg.png")
     pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/fillerbg.png"
 timeText.repeat(1000,updateTime)
-pictureDisplay.repeat(1000/freq,updateImg)
+pictureDisplay.repeat(100,updateImg)
+#camera.capture_file("fillerbg.png")
 
 #Await Server login
 
