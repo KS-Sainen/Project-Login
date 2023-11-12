@@ -180,6 +180,28 @@ camera.configure(config)
 camera.start()
 sleep(1)
 #Callbacks
+def invalidateSelection():
+    global isDetect
+    global textConfr
+    isDetect = False
+    textConfr.value = "Student Name : N/A"
+def confirmSelection():
+    global detectR
+    if isDetect:
+        now = datetime.now()
+        current_time = now.strftime("%Y-%m-%d %H:%M:%S.123Z")
+        minutes = 60*now.hour + now.minute
+        if minutes >= (15*60 + 15) and (detectR.arrival_status == "late" or detectR.arrival_status == "present"):
+            detectR.departure_time = current_time
+        elif minutes >= (7*60 + 50):
+            detectR.arrival_status = "late"
+            detectR.arrival_time = current_time
+        else:
+            detectR.arrival_status = "present"
+            detectR.arrival_time = current_time
+        client.collection(getRoom(6,roomAns)).update(detectR.id,detectR)
+        print("Time checked!")
+        isDetect = False
 def updateTime():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
