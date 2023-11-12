@@ -2,6 +2,7 @@ from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
 import face_recognition
 import requests
+import time
 def getRoom(g,r):
     return "M"+str(g)+str(r)
 def getStrList(arr):
@@ -36,8 +37,9 @@ for i in range(4):
     resultList = client.collection("M6"+str(room)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
     for j in resultList.items:
         try:
-            url = "http://sadtsdatamanage.pockethost.io/api/files/"+collection+"/"+j.id+"/"+j.pictures[0]
+            url = "http://sadtsdatamanage.pockethost.io/api/files/"+getRoom(6,room)+"/"+j.id+"/"+j.pictures[0]
             r = requests.get(url, allow_redirects=True)
+            time.sleep(0.1)
             open('s'+str(student)+'.png', 'wb').write(r.content)
             print(j.pictures[0])
             updateArr.append(student)
