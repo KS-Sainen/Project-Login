@@ -1,11 +1,11 @@
-from pocketbase import PocketBase  # Client also works the same
-from pocketbase.client import FileUpload
-import numpy as np
 import face_recognition
 import requests
+import bcrypt
+from pocketbase import PocketBase  # Client also works the same
+from pocketbase.client import FileUpload
 from time import sleep
 from datetime import datetime
-from guizero import App, Text, PushButton, Drawing, Box, Picture
+from guizero import App, Text, PushButton, Drawing, Box, Picture, TextBox
 from picamera2 import Picamera2
 freq = 30
 margin = 15
@@ -139,6 +139,19 @@ clockMargin.bg = bgC
 clockBox = Box(clockGrid,border=5,width=200,height=clockH,grid=[1,1],align="left")
 clockBox.bg = bgW
 timeText = Text(clockBox,size=24,font=UIfont,color=textB,align="left")
+clockDiVBox = Box(clockGrid,border=0,width=margin*20,height=clockH,grid=[2,1],align="left")
+clockMargin.bg = bgC
+adminBox = Box(clockGrid,border=0,width=300,height=clockH,grid=[3,1],align="left",layout="grid")
+adminBox.bg = bgC
+adminButtonState = 0 #0 = open form, 1 = submit, 2 = close admin menu
+passS = b'$2b$12$PAzoMIYWcJPTU4L8vVHfHO'
+passH = b'$2b$12$PAzoMIYWcJPTU4L8vVHfHOr1APSL6Q7nUL4OLkQf41ijCONLSCGVq' #main password hash
+adminButton = PushButton(adminBox,image="D:\\Some Programs idk\\terminal.png",width=50,height=50,grid=[0,0])
+adminButton.bg = bgW
+adminInput = TextBox(adminBox,hide_text=True,width=15,grid=[1,0])
+adminInput.bg = bgW
+adminInput.text_size = 16
+adminInput.hide()
 
 # More Grids
 #picture = Picture(app, image="input.jpg",grid=[3,0],width=200,height=aH-dM)
@@ -155,19 +168,36 @@ textCBox = Box(studentGrid,border=0,width=mainW-dM,height=40,grid=[1,1],align="l
 textConfr = Text(textCBox,size=18,font=UIfont,color=textB,text="Student Name : ")
 fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=margin,grid=[1,2],align="left")
 fillerBox.bg = bgW
-buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=50,grid=[1,3],align="left",layout="grid")
-buttonConfirm = PushButton(buttonBox,command=dummyFunc,text="Confirm",width=10,height=1,padx=5,pady=5,grid=[0,0])
+buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=180,grid=[1,3],align="left",layout="grid")
+buttonConfirm = PushButton(buttonBox,command=dummyFunc,text="Confirm",width=10,height=1,padx=5,pady=5,grid=[0,0],align="left")
 buttonConfirm.bg = "#59a3f9"
 buttonConfirm.font = UIfont
 buttonConfirm.text_color = textW
 buttonConfirm.text_size	= 16
-fillerBox = Box(buttonBox,border=0,width=margin*2,height=50,grid=[1,0],align="left")
-buttonReject = PushButton(buttonBox,command=dummyFunc,text="Reject",width=10,height=1,padx=5,pady=5,grid=[2,0])
+fillerBox = Box(buttonBox,border=0,width=margin*2,height=75-margin,grid=[1,0],align="left")
+buttonReject = PushButton(buttonBox,command=dummyFunc,text="Reject",width=10,height=1,padx=5,pady=5,grid=[2,0],align="left")
 buttonReject.bg = "#f95959"
 buttonReject.font = UIfont
 buttonReject.text_color = textW
 buttonReject.text_size	= 16
 studentGrid.height = mainH - dM
+# Admin Controls
+fillerBox = Box(buttonBox,border=0,width=margin,height=8,grid=[0,1],align="left")
+dbRuleButton = PushButton(buttonBox,text="DB Rule",width=10,height=1,padx=5,pady=5,grid=[0,2],align="left")
+dbRuleButton.bg = "#59a3f9"
+dbRuleButton.font = UIfont
+dbRuleButton.text_color = textW
+dbRuleButton.text_size	= 16
+fillerBox = Box(buttonBox,border=0,width=margin,height=8,grid=[0,3],align="left")
+imageUpdate = PushButton(buttonBox,text="Update Images",width=15,height=1,padx=5,pady=5,grid=[0,4],align="left")
+imageUpdate.bg = "#59a3f9"
+imageUpdate.font = UIfont
+imageUpdate.text_color = textW
+imageUpdate.text_size	= 16
+imageUpdate.disable()
+imageUpdate.hide()
+dbRuleButton.disable()
+dbRuleButton.hide()
 # Image Display and Overlay
 #pictureDisplay = Box(pictureGrid,border=5,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left")
 #pictureDisplay.bg = bgW
@@ -223,6 +253,52 @@ def updateDispText():
         textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
     else:
         textConfr.value = "Student Name : N/A"
+def updateAdminButton():
+    global adminButtonState
+    global adminButton
+    if adminButtonState==0:
+        adminButton.image = "/home/sainen/Downloads/Project-Login/hardware/terminal.png"
+        adminButton.color = bgW
+    elif adminButtonState==1:
+        adminButton.image = "/home/sainen/Downloads/Project-Login/hardware/check.png"
+        adminButton.color="#59a3f9"
+    else:
+        adminButton.image = "/home/sainen/Downloads/Project-Login/hardware/close.png"
+        adminButton.color="#f95959"
+    adminButton.resize(50,50)
+def onAdminButtonPress():
+    global adminButtonState
+    global adminInput
+    if adminButtonState==0:
+        adminButtonState=1
+        adminInput.show()
+    elif adminButtonState==1:
+        #take the text then do stuff with it
+        inputTxt = str.encode(adminInput.value)
+        if adminInput.value == "":
+            adminButtonState=0
+            adminInput.hide()
+            return
+        passC = passS + inputTxt
+        adminInput.value = ""
+        if bcrypt.checkpw(passC, passH):
+            print("You're In!")
+            adminInput.hide()
+            imageUpdate.enable()
+            imageUpdate.show()
+            dbRuleButton.enable()
+            dbRuleButton.show()
+            adminButtonState=2
+        else:
+            print("nuh uh")
+    else:
+        imageUpdate.disable()
+        imageUpdate.hide()
+        dbRuleButton.disable()
+        dbRuleButton.hide()
+        adminButtonState=0
+    updateAdminButton()
+adminButton.update_command(onAdminButtonPress)
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
 textConfr.repeat(2500,updateDispText)
