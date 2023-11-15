@@ -12,6 +12,7 @@ student = 0
 em = 0
 client = PocketBase('https://sadtsdatamanage.pockethost.io')
 updateArr = []
+sz = [0,0,0,0]
 collection = "M64"
 # authenticate as regular user
 try:
@@ -36,9 +37,9 @@ for i in range(4):
             else:
                 now = datetime.now()
                 datestr = j.arrival_time
-                print(datestr)
+                #print(datestr)
                 dateNum = int(datestr[8:10])
-                print("Day = "+str(dateNum))
+                #print("Day = "+str(dateNum))
                 if dateNum != now.day:
                     j.arrival_status = "absent"
                     j.arrival_time = ""
@@ -56,10 +57,25 @@ for i in range(4):
             print("No Image?")
             em += 1
         student += 1
+    sz[room-1]=student
     room += 1
 print("Picture Retrieved\nEmpty Count : " + str(em) + "\nStudent Count : " + str(student))
 print("Table to update : " + str(updateArr))
 client.auth_store.clear()
+
+f = open("updateArr.txt","w")
+def getStrList(arr):
+    res = ""
+    sz = 0
+    for i in arr:
+        sz += 1
+        res += str(i)
+        if sz < len(arr):
+            res += ","
+    return res
+f.write(getStrList(updateArr))
+f = open("szArr.txt","w")
+f.write(getStrList(sz))
 
 for i in updateArr:
     try:

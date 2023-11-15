@@ -32,41 +32,43 @@ def getRoom(g,r):
 room = 1
 student = 0
 em = 0
-sz = [0,0,0,0]
+sz = []
 updateArr = []
 encodings = []
 client = PocketBase('https://sadtsdatamanage.pockethost.io')
-#auth
-try:
-    authData = client.collection('users').auth_with_password('sadtsdatamanage@gmail.com', '12345');
-    print(client.auth_store.token)
-    print(client.auth_store.model.id)
-except:
-    print("Authentication Error")
 collection = "M64"
 resultList = client.collection("M64").get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
-#get picture 0 of every student in every room
-for i in range(4):
-    resultList = client.collection("M6"+str(room)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
-    for j in resultList.items:
-        try:
-            url = "http://sadtsdatamanage.pockethost.io/api/files/"+getRoom(6,room)+"/"+j.id+"/"+j.pictures[0]
-            r = requests.get(url, allow_redirects=True)
-            open('s'+str(student)+'.png', 'wb').write(r.content)
-            updateArr.append(student)
-        except:
-            #print("No Image?")
-            em += 1
-        student += 1
-    sz[room-1]=student
-    room += 1
-print("Students Image Checked\nEmpty Count : " + str(em) + "\nTotal Count : " + str(student))
+#load updatearray and size array 
+f = open("updateArr.txt","r")
+try:
+    raw_text = f.read()
+    raw_arr = raw_text.split(",")
+    for j in raw_arr:
+        updateArr.append(int(j))
+    print(str(updateArr))
+except:
+    print("update array error")
+f.close()
+f = open("szArr.txt","r")
+try:
+    raw_text = f.read()
+    raw_arr = raw_text.split(",")
+    for j in raw_arr:
+        sz.append(int(j))
+    print(str(updateArr))
+except:
+    print("size array error")
+print("Loaded Arrays")
+f.close()
 indx = 0
 #Load Encodings
 for i in updateArr:
     try:
-        f = open("e"+str(i)+".npy","rb")
-        encodings.append(np.load(f))
+        f = open("e"+str(i)+".txt","r")
+        raw_text = f.read()
+        raw_arr = raw_text.split(",")
+        for j in raw_arr:
+            encodings[i].append(float(j))
         # for j in encodings:
         #     print(i)
         print("E"+str(i))
@@ -75,55 +77,6 @@ for i in updateArr:
         print("FRE"+str(i))
     indx+=1
 print("Loaded Encodings")
-#Face Recognition
-#Calculates the room and place in db of that room
-def getRoomAns(x):
-    if x == -1:
-        return -1
-    ret = 1
-    for i in sz:
-        if i > x:
-            return ret
-        ret += 1
-    return 4
-def getIndex(x,r):
-    if x==-1:
-        return -1
-    if r==1:
-        return x
-    else:
-        return abs(x-sz[r-2])
-#Returns a record of the detected student
-roomAns = 0
-isDetect = False
-detectR = {}
-indexAns = 0
-def faceReg():
-    global roomAns
-    global indexAns
-    global isDetect
-    studentAns = -1
-    f = face_recognition.load_image_file("dispimage.png")
-    face_locations = face_recognition.face_locations(f)
-    face_encodings = face_recognition.face_encodings(f, face_locations)
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        matches = []
-        face_distances = []
-        matches.append(face_recognition.compare_faces(encodings, face_encoding))
-        face_distances.append(face_recognition.face_distance(encodings, face_encoding))
-        if True in matches:
-            studentAns = matches.index(True)
-        else:
-            studentAns = np.argmin(face_distances)
-            #dist = face_distances[studentAns]
-    if studentAns != -1:
-        studentAns = updateArr[studentAns]
-        roomAns = getRoomAns(studentAns)
-        indexAns = getIndex(studentAns,roomAns)
-        isDetect = True
-    else:
-        isDetect = False
 
 # Build the UI
 # Masters, [x,y]
@@ -203,39 +156,12 @@ dbRuleButton.hide()
 #pictureDisplay.bg = bgW
 pictureDisplay = Picture(pictureGrid,width=pictureW-dM,height=mainH-dM,grid=[0,0],align="left",image="/home/sainen/Downloads/Project-Login/hardware/fillerbg.png")
 
-#Camera
 camera = Picamera2()
 config = camera.create_preview_configuration({"size":(pictureW-dM,mainH-dM)})
 camera.configure(config)
 camera.start()
 sleep(1)
 #Callbacks
-def invalidateSelection():
-    global isDetect
-    global textConfr
-    isDetect = False
-    textConfr.value = "Student Name : N/A"
-def confirmSelection():
-    global detectR
-    global isDetect
-    if isDetect:
-        now = datetime.now()
-        current_time = str(now.strftime("%Y-%m-%d %H:%M:%S.123Z"))
-        minutes = 60*now.hour + now.minute
-        detectR.created = detectR.created.strftime("%Y-%m-%d %H:%M:%S.123Z")
-        detectR.updated = detectR.updated.strftime("%Y-%m-%d %H:%M:%S.123Z")
-        if minutes >= (15*60 + 15) and (detectR.arrival_status == "late" or detectR.arrival_status == "present"):
-            detectR.departure_time = current_time
-        elif minutes >= (7*60 + 50):
-            detectR.arrival_status = "late"
-            detectR.arrival_time = current_time
-        else:
-            detectR.arrival_status = "present"
-            detectR.arrival_time = current_time
-        print(detectR.__dict__)
-        client.collection("M64").update(detectR.id,detectR.__dict__)
-        print("Time checked!")
-        isDetect = False
 def updateTime():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -243,16 +169,6 @@ def updateTime():
 def updateImg():
     camera.capture_file("dispimage.png")
     pictureDisplay.image = "/home/sainen/Downloads/Project-Login/hardware/dispimage.png"
-def updateDispText():
-    global detectR
-    faceReg()
-    detectR = client.collection(getRoom(6,roomAns)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
-    detectR = (detectR.items)[indexAns]
-    if isDetect:
-        print("saa! saa! mikkoku da! " + str(indexAns) + "/" +  str(roomAns))
-        textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
-    else:
-        textConfr.value = "Student Name : N/A"
 def updateAdminButton():
     global adminButtonState
     global adminButton
@@ -301,9 +217,6 @@ def onAdminButtonPress():
 adminButton.update_command(onAdminButtonPress)
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
-textConfr.repeat(2500,updateDispText)
-buttonConfirm.update_command(confirmSelection)
-buttonReject.update_command(invalidateSelection)
 #camera.capture_file("fillerbg.png")
 
 #Await Server login
