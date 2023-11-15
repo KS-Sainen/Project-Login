@@ -2,6 +2,7 @@ import face_recognition
 import requests
 import bcrypt
 import numpy as np
+import sadtsUpdateImg
 from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
 from time import sleep
@@ -39,42 +40,51 @@ encodings = []
 client = PocketBase('https://sadtsdatamanage.pockethost.io')
 collection = "M64"
 resultList = client.collection("M64").get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
-#load updatearray and size array 
-f = open("updateArr.txt","r")
-try:
-    raw_text = f.read()
-    raw_arr = raw_text.split(",")
-    for j in raw_arr:
-        updateArr.append(int(j))
-    print(str(updateArr))
-except:
-    print("update array error")
-f.close()
-f = open("szArr.txt","r")
-try:
-    raw_text = f.read()
-    raw_arr = raw_text.split(",")
-    for j in raw_arr:
-        sz.append(int(j))
-    print(str(updateArr))
-except:
-    print("size array error")
-print("Loaded Arrays")
-f.close()
-indx = 0
-#Load Encodings
-for i in updateArr:
+#load updatearray and size array
+indx=0
+def readFiles():
+    global updateArr
+    global sz
+    global encodings
+    updateArr = []
+    sz = []
+    encodings = []
+    f = open("updateArr.txt","r")
     try:
-        f = open("e"+str(i)+".npy","rb")
-        encodings.append(np.load(f))
-        # for j in encodings:
-        #     print(i)
-        print("E"+str(i))
-        f.close()
+        raw_text = f.read()
+        raw_arr = raw_text.split(",")
+        for j in raw_arr:
+            updateArr.append(int(j))
+        print(str(updateArr))
     except:
-        print("FRE"+str(i))
-    indx+=1
-print("Loaded Encodings")
+        print("update array error")
+    f.close()
+    f = open("szArr.txt","r")
+    try:
+        raw_text = f.read()
+        raw_arr = raw_text.split(",")
+        for j in raw_arr:
+            sz.append(int(j))
+        print(str(updateArr))
+    except:
+        print("size array error")
+    print("Loaded Arrays")
+    f.close()
+    #Load Encodings
+    indx=0
+    for i in updateArr:
+        try:
+            f = open("e"+str(i)+".npy","rb")
+            encodings.append(np.load(f))
+            # for j in encodings:
+            #     print(i)
+            print("E"+str(i))
+            f.close()
+        except:
+            print("FRE"+str(i))
+        indx+=1
+    print("Loaded Encodings")
+readFiles()
 #Face Recognition
 #Calculates the room and place in db of that room
 def getRoomAns(x):
@@ -214,7 +224,7 @@ buttonReject.text_size	= 16
 studentGrid.height = mainH - dM
 # Admin Controls
 fillerBox = Box(buttonBox,border=0,width=margin,height=8,grid=[0,1],align="left")
-dbRuleButton = PushButton(buttonBox,text="DB Rule",width=10,height=1,padx=5,pady=5,grid=[0,2],align="left")
+dbRuleButton = PushButton(buttonBox,text="Apply DB Rules",width=15,height=1,padx=5,pady=5,grid=[0,2],align="left")
 dbRuleButton.bg = "#59a3f9"
 dbRuleButton.font = UIfont
 dbRuleButton.text_color = textW
@@ -272,19 +282,19 @@ def onAdminButtonPress():
         if adminInput.value == "":
             adminButtonState=0
             adminInput.hide()
-            return
-        passC = passS + inputTxt
-        adminInput.value = ""
-        if bcrypt.checkpw(passC, passH):
-            print("You're In!")
-            adminInput.hide()
-            imageUpdate.enable()
-            imageUpdate.show()
-            dbRuleButton.enable()
-            dbRuleButton.show()
-            adminButtonState=2
         else:
-            print("nuh uh")
+            passC = passS + inputTxt
+            adminInput.value = ""
+            if bcrypt.checkpw(passC, passH):
+                print("You're In!")
+                adminInput.hide()
+                imageUpdate.enable()
+                imageUpdate.show()
+                dbRuleButton.enable()
+                dbRuleButton.show()
+                adminButtonState=2
+            else:
+                print("nuh uh")
     else:
         imageUpdate.disable()
         imageUpdate.hide()
@@ -321,19 +331,52 @@ def confirmSelection():
 def updateDispText():
     global detectR
     faceReg()
-    detectR = client.collection(getRoom(6,roomAns)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
-    detectR = (detectR.items)[indexAns]
     if isDetect:
+        detectR = client.collection(getRoom(6,roomAns)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
+        detectR = (detectR.items)[indexAns]
         print("saa! saa! mikkoku da! " + str(indexAns) + "/" +  str(roomAns))
         textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
     else:
         textConfr.value = "Student Name : N/A"
+isItUpdate = False
+isDBUpdate = False
+def onImageUpdatePress():
+    global isItUpdate
+    isItUpdate = True
+    imageUpdate.bg = bgC
+    imageUpdate.text = "Updating..."
+def onDBUpdatePress():
+    global isDBUpdate
+    isDBUpdate = True
+    dbRuleButton.bg = bgC
+    dbRuleButton.text = "Updating..."
+def doImageUpdate():
+    global isItUpdate
+    global imageUpdate
+    if isItUpdate:
+        sadtsUpdateImg.updateImages()
+        readFiles()
+        imageUpdate.bg = "#59a3f9"
+        imageUpdate.text = "Update Images"
+        isItUpdate = False
+def doDBUpdate():
+    global isDBUpdate
+    global dbRuleButton
+    if isDBUpdate:
+        sadtsUpdateImg.applyDBRules()
+        dbRuleButton.bg = "#59a3f9"
+        dbRuleButton.text = "Apply DB Rules"
+        isDBUpdate = False
 adminButton.update_command(onAdminButtonPress)
 textConfr.repeat(2500,updateDispText)
 timeText.repeat(1000,updateTime)
 pictureDisplay.repeat(100,updateImg)
+buttonBox.repeat(100,doImageUpdate)
+textCBox.repeat(100,doDBUpdate)
 buttonConfirm.update_command(confirmSelection)
 buttonReject.update_command(invalidateSelection)
+imageUpdate.update_command(onImageUpdatePress)
+dbRuleButton.update_command(onDBUpdatePress)
 #camera.capture_file("fillerbg.png")
 
 #Await Server login
