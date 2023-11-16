@@ -3,6 +3,7 @@ import requests
 import bcrypt
 import numpy as np
 import sadtsUpdateImg
+import sadtsFileMgr
 from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
 from time import sleep
@@ -46,44 +47,9 @@ def readFiles():
     global updateArr
     global sz
     global encodings
-    updateArr = []
-    sz = []
-    encodings = []
-    f = open("updateArr.txt","r")
-    try:
-        raw_text = f.read()
-        raw_arr = raw_text.split(",")
-        for j in raw_arr:
-            updateArr.append(int(j))
-        print(str(updateArr))
-    except:
-        print("update array error")
-    f.close()
-    f = open("szArr.txt","r")
-    try:
-        raw_text = f.read()
-        raw_arr = raw_text.split(",")
-        for j in raw_arr:
-            sz.append(int(j))
-        print(str(updateArr))
-    except:
-        print("size array error")
-    print("Loaded Arrays")
-    f.close()
-    #Load Encodings
-    indx=0
-    for i in updateArr:
-        try:
-            f = open("e"+str(i)+".npy","rb")
-            encodings.append(np.load(f))
-            # for j in encodings:
-            #     print(i)
-            print("E"+str(i))
-            f.close()
-        except:
-            print("FRE"+str(i))
-        indx+=1
-    print("Loaded Encodings")
+    updateArr = sadtsFileMgr.getUpdateArr()
+    sz = sadtsFileMgr.getSZArr()
+    encodings = sadtsFileMgr.getEncodings(updateArr)
 readFiles()
 #Face Recognition
 #Calculates the room and place in db of that room
