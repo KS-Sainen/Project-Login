@@ -33,7 +33,7 @@ function StudentBar({ itemID, name, surname, number, status }) {
           {status == "LEAVE ON PERMISSION" ? (
             <div className="ml-6 xl:-ml-[100px] w-[1000px] text-[6px] xl:text-[20px] tracking-tighter xl:tracking-normal">{status}</div>
           ) : (
-            <div className="ml-10 text-center">{status}</div>
+            <div className="ml-10 xl:ml-1 text-center">{status}</div>
           )}
         </div>
       )}
