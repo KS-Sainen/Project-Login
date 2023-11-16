@@ -12,6 +12,9 @@ export default function SignIn() {
   const [invalidPassword, setInvalidPassword] = useState(false);
 
   const isLoggedIn = pb.authStore.isValid;
+  if (isLoggedIn) {
+    return (window.location.href = "/class");
+  }
 
   const signIn = async (Email, Password) => {
     const emailRegex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
@@ -29,15 +32,14 @@ export default function SignIn() {
         const authData = await pb
           .collection("Users")
           .authWithPassword(Email, Password);
+        window.location.href = "/class";
       } catch (e) {
-        alert("User data is either blank or not found. Please check your email and password.");
+        alert(
+          "User data is either blank or not found. Please check your email and password."
+        );
       }
     }
   };
-
-  if (isLoggedIn) {
-    return (window.location.href = "/class");
-  }
 
   return (
     <>

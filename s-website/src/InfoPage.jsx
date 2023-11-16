@@ -18,7 +18,7 @@ export default function InfoPage() {
     let path = {};
 
     record.pictures.forEach((item) => {
-      if (item.startsWith("straightface")) {
+      if (item.startsWith("main")) {
         path = item;
       }
     });
