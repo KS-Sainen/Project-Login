@@ -82,7 +82,7 @@ def applyDBRules():
                         j.arrival_status = "absent"
                         j.arrival_time = ""
                         j.departure_time = ""
-                        client.collection("M64").update(j.id,j.__dict__)
+                        client.collection("M6"+str(room)).update(j.id,j.__dict__)
             except:
                 print("ERR")
         room += 1
