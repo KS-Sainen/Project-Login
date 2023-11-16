@@ -172,10 +172,13 @@ pictureGrid = Box(mainGrid,border=0,width=pictureW,height=mainH,grid=[3,1],layou
 # Two Buttons
 studentMargin = Box(studentGrid,border=0,width=margin,height=margin,grid=[0,0],align="left")
 textCBox = Box(studentGrid,border=0,width=mainW-dM,height=40,grid=[1,1],align="left")
+textCBox2 = Box(studentGrid,border=0,width=mainW-dM,height=40,grid=[1,2],align="left")
 textConfr = Text(textCBox,size=18,font=UIfont,color=textB,text="Student Name : ")
-fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=margin,grid=[1,2],align="left")
+textStatus = Text(textCBox2,size=14,font=UIfont,color=textB,text="")
+textStatus.hide()
+fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=margin,grid=[1,3],align="left")
 fillerBox.bg = bgW
-buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=180,grid=[1,3],align="left",layout="grid")
+buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=180,grid=[1,4],align="left",layout="grid")
 buttonConfirm = PushButton(buttonBox,command=dummyFunc,text="Confirm",width=10,height=1,padx=5,pady=5,grid=[0,0],align="left")
 buttonConfirm.bg = "#59a3f9"
 buttonConfirm.font = UIfont
@@ -273,6 +276,16 @@ def invalidateSelection():
     global textConfr
     isDetect = False
     textConfr.value = "Student Name : N/A"
+def updateStatusText():
+    global textStatus
+    global detectR
+    if detectR.arrival_status != "absent":
+        datestr = detectR.arrival_time
+        textStatus.value = "Checked in at : " + datestr[11:19]
+        textStatus.show()
+    else:
+        textStatus.value = ""
+        textStatus.hide()
 def confirmSelection():
     global detectR
     global isDetect
@@ -293,7 +306,7 @@ def confirmSelection():
         print(detectR.__dict__)
         client.collection("M64").update(detectR.id,detectR.__dict__)
         print("Time checked!")
-        isDetect = False
+    updateStatusText()
 def updateDispText():
     global detectR
     faceReg()
@@ -302,6 +315,7 @@ def updateDispText():
         detectR = (detectR.items)[indexAns]
         print("saa! saa! mikkoku da! " + str(indexAns) + "/" +  str(roomAns))
         textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
+        updateStatusText()
     else:
         textConfr.value = "Student Name : N/A"
 isItUpdate = False
