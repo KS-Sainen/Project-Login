@@ -138,7 +138,7 @@ def faceReg():
 app = App(height=aH,width=aW,title="SADTS",layout="grid",bg=bgC)
 marginR = Box(app,border=0,width=margin,height=margin,grid=[0,0],align="left")
 clockGrid = Box(app,border=0,width=aW,height=clockH,grid=[1,1],layout="grid",align="left")
-mainGrid = Box(app,border=0,width=aW,height=mainH,grid=[1,2],layout="grid",align="top")
+mainGrid = Box(app,border=0,width=aW,height=mainH,grid=[1,2],layout="grid",align="left")
 
 # Clock + Admin Menu
 clockMargin = Box(clockGrid,border=0,width=margin,height=margin,grid=[0,0],align="left")

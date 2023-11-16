@@ -44,7 +44,7 @@ def getSZArr():
         raw_arr = raw_text.split(",")
         for j in raw_arr:
             ret.append(int(j))
-        print(str(updateArr))
+        print(str(ret))
     except:
         print("size array error")
     print("Loaded Arrays")
