@@ -61,8 +61,8 @@ export default function InfoPage() {
 
   return (
     <>
-      <nav className="h-20 lg:h-[150px] w-full bg-[#59A3F9] flex items-center justify-between">
-        <div className="items-center lg:pt-[15px] flex justify-between w-full mx-2 lg:mx-10">
+      <nav className="h-20 lg:h-[150px] w-full justify-center bg-[#59A3F9] flex">
+        <div className="items-center lg:pt-[15px] flex mx-2 lg:mx-10">
           <img src={icon} className="w-12 h-12 lg:w-[121px] lg:h-[121px]" />
           <div className="flex items-center">
             <div className="flex flex-col gap-y-1 lg:gap-y-5 items-center justify-center">
@@ -87,7 +87,7 @@ export default function InfoPage() {
           src={imagePath}
           className="outline outline-black lg:outline-[5px] h-[200px] lg:h-[509px] mt-7 lg:mt-[42.5px] w-[160px] lg:w-[400px] ml-5 lg:ml-[100px]"
         />
-        <div className="flex flex-col mx-0 lg:mx-20 my-20 lg:my-0 space-y-10">
+        <div className="flex flex-col lg:mx-20 my-20 lg:my-0 space-y-10">
           {data.map((item) => (
             <div className="flex space-x-6">
               <div className="font-semibold">{item[0]}:</div>
