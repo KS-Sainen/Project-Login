@@ -172,34 +172,37 @@ pictureGrid = Box(mainGrid,border=0,width=pictureW,height=mainH,grid=[3,1],layou
 # Two Buttons
 studentMargin = Box(studentGrid,border=0,width=margin,height=margin,grid=[0,0],align="left")
 textCBox = Box(studentGrid,border=0,width=mainW-dM,height=40,grid=[1,1],align="left")
-textCBox2 = Box(studentGrid,border=0,width=mainW-dM,height=40,grid=[1,2],align="left")
+textCBox2 = Box(studentGrid,border=0,width=mainW-dM,height=30,grid=[1,2],align="left")
 textConfr = Text(textCBox,size=18,font=UIfont,color=textB,text="Student Name : ")
 textStatus = Text(textCBox2,size=14,font=UIfont,color=textB,text="")
 textStatus.hide()
-fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=margin,grid=[1,3],align="left")
+fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=3,grid=[1,3],align="left")
 fillerBox.bg = bgW
-buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=180,grid=[1,4],align="left",layout="grid")
-buttonConfirm = PushButton(buttonBox,command=dummyFunc,text="Confirm",width=10,height=1,padx=5,pady=5,grid=[0,0],align="left")
+buttonBox = Box(studentGrid,border=0,width=mainW-dM,height=55,grid=[1,4],align="left",layout="grid")
+mainHW = int((mainW-dM)/2)
+bBS1 = Box(buttonBox,border=0,width=mainHW,height=60,grid=[0,0])
+bBS2 = Box(buttonBox,border=0,width=mainHW,height=60,grid=[1,0])
+buttonConfirm = PushButton(bBS1,command=dummyFunc,text="Confirm",width=10,height=1,padx=5,pady=5,align="left")
 buttonConfirm.bg = "#59a3f9"
 buttonConfirm.font = UIfont
 buttonConfirm.text_color = textW
 buttonConfirm.text_size	= 16
-fillerBox = Box(buttonBox,border=0,width=margin*2,height=75-margin,grid=[1,0],align="left")
-buttonReject = PushButton(buttonBox,command=dummyFunc,text="Reject",width=10,height=1,padx=5,pady=5,grid=[2,0],align="left")
+buttonReject = PushButton(bBS2,command=dummyFunc,text="Reject",width=10,height=1,padx=5,pady=5,align="left")
 buttonReject.bg = "#f95959"
 buttonReject.font = UIfont
 buttonReject.text_color = textW
 buttonReject.text_size	= 16
 studentGrid.height = mainH - dM
 # Admin Controls
-fillerBox = Box(buttonBox,border=0,width=margin,height=8,grid=[0,1],align="left")
-dbRuleButton = PushButton(buttonBox,text="Apply DB Rules",width=15,height=1,padx=5,pady=5,grid=[0,2],align="left")
+fillerBox = Box(studentGrid,border=0,width=mainW-dM,height=3,grid=[1,5],align="left")
+adminBox = Box(studentGrid,border=0,width=mainW-dM,height=110,grid=[1,6],align="left",layout="grid")
+dbRuleButton = PushButton(adminBox,text="Apply DB Rules",width=15,height=1,padx=5,pady=5,grid=[0,1],align="left")
 dbRuleButton.bg = "#59a3f9"
 dbRuleButton.font = UIfont
 dbRuleButton.text_color = textW
 dbRuleButton.text_size	= 16
-fillerBox = Box(buttonBox,border=0,width=margin,height=8,grid=[0,3],align="left")
-imageUpdate = PushButton(buttonBox,text="Update Images",width=15,height=1,padx=5,pady=5,grid=[0,4],align="left")
+fillerBox = Box(adminBox,border=0,width=margin,height=8,grid=[0,2],align="left")
+imageUpdate = PushButton(adminBox,text="Update Images",width=15,height=1,padx=5,pady=5,grid=[0,3],align="left")
 imageUpdate.bg = "#59a3f9"
 imageUpdate.font = UIfont
 imageUpdate.text_color = textW
@@ -309,6 +312,7 @@ def confirmSelection():
     updateStatusText()
 def updateDispText():
     global detectR
+    global textStatus
     faceReg()
     if isDetect:
         detectR = client.collection(getRoom(6,roomAns)).get_list(1, 50, {"filter": 'created >= "2022-01-01 00:00:00"'})
@@ -317,6 +321,8 @@ def updateDispText():
         textConfr.value = ("Student Name : " + detectR.name + " " + detectR.surname)
         updateStatusText()
     else:
+        textStatus.value = ""
+        textStatus.hide()
         textConfr.value = "Student Name : N/A"
 isItUpdate = False
 isDBUpdate = False
