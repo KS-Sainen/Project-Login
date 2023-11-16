@@ -1,8 +1,3 @@
-from pocketbase import PocketBase  # Client also works the same
-from pocketbase.client import FileUpload
-import face_recognition
-from datetime import datetime
-import requests
 import time
 import numpy as np
 # Supported Commands :
