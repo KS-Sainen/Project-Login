@@ -293,7 +293,7 @@ def updateStatusText():
         datestr = detectR.arrival_time
         raw_time = datestr[11:19]
         #convert hours
-        raw_time = str(int(raw_time[0:2])-timeZone if int(raw_time[0:2])>=timeZone else 24+int(raw_time[0:2])-timeZone)+raw_time[2:]
+        raw_time = str(int(raw_time[0:2])+timeZone if int(raw_time[0:2])+timeZone < 24 else int(raw_time[0:2])+timeZone-24)+raw_time[2:]
         textStatus.value = "Checked in at : " + raw_time
         textStatus.show()
     else:
@@ -304,7 +304,7 @@ def confirmSelection():
     global isDetect
     if isDetect:
         now = datetime.now()
-        update_time = str(convLocal(now).strftime("%Y-%m-%d %H:%M:%S.123Z"))
+        update_time = str(unConvLocal(now).strftime("%Y-%m-%d %H:%M:%S.123Z"))
         minutes = 60*now.hour + now.minute
         detectR.created = detectR.created.strftime("%Y-%m-%d %H:%M:%S.123Z")
         detectR.updated = detectR.updated.strftime("%Y-%m-%d %H:%M:%S.123Z")
