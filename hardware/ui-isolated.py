@@ -7,7 +7,7 @@ import sadtsFileMgr
 from pocketbase import PocketBase  # Client also works the same
 from pocketbase.client import FileUpload
 from time import sleep
-from datetime import datetime
+from datetime import datetime, timedelta
 from guizero import App, Text, PushButton, Drawing, Box, Picture, TextBox
 from picamera2 import Picamera2
 freq = 30
@@ -28,6 +28,13 @@ bgC = "#242528"
 isButtonPress = False
 def dummyFunc():
     return 0
+#Utility Functions - Time
+timeZone = 7
+dTime = timedelta(hours=timeZone)
+def convLocal(now):
+    return now + dTime
+def unConvLocal(now):
+    return now - dTime
 
 #Serverwork
 def getRoom(g,r):
@@ -284,7 +291,10 @@ def updateStatusText():
     global detectR
     if detectR.arrival_status != "absent":
         datestr = detectR.arrival_time
-        textStatus.value = "Checked in at : " + datestr[11:19]
+        raw_time = datestr[11:19]
+        #convert hours
+        raw_time = str(int(raw_time[0:3])-timeZone if int(raw_time[0:3])>=timeZone else 24-int(raw_time[0:3])-timeZone) + raw_time[3:]
+        textStatus.value = "Checked in at : " + raw_time
         textStatus.show()
     else:
         textStatus.value = ""
@@ -294,20 +304,20 @@ def confirmSelection():
     global isDetect
     if isDetect:
         now = datetime.now()
-        current_time = str(now.strftime("%Y-%m-%d %H:%M:%S.123Z"))
+        update_time = str(convLocal(now).strftime("%Y-%m-%d %H:%M:%S.123Z"))
         minutes = 60*now.hour + now.minute
         detectR.created = detectR.created.strftime("%Y-%m-%d %H:%M:%S.123Z")
         detectR.updated = detectR.updated.strftime("%Y-%m-%d %H:%M:%S.123Z")
         if minutes >= (15*60 + 15) and (detectR.arrival_status == "late" or detectR.arrival_status == "present"):
-            detectR.departure_time = current_time
+            detectR.departure_time = update_time
         elif minutes >= (7*60 + 50):
             detectR.arrival_status = "late"
-            detectR.arrival_time = current_time
+            detectR.arrival_time = update_time
         else:
             detectR.arrival_status = "present"
-            detectR.arrival_time = current_time
+            detectR.arrival_time = update_time
         print(detectR.__dict__)
-        client.collection("M64").update(detectR.id,detectR.__dict__)
+        client.collection(getRoom(6,roomAns)).update(detectR.id,detectR.__dict__)
         print("Time checked!")
     updateStatusText()
 def updateDispText():
