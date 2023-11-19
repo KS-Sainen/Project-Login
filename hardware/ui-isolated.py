@@ -293,7 +293,7 @@ def updateStatusText():
         datestr = detectR.arrival_time
         raw_time = datestr[11:19]
         #convert hours
-        raw_time = str(int(raw_time[0:3])-timeZone if int(raw_time[0:3])>=timeZone else 24-int(raw_time[0:3])-timeZone) + raw_time[3:]
+        raw_time = str(int(raw_time[0:2])-timeZone if int(raw_time[0:2])>=timeZone else 24+int(raw_time[0:2])-timeZone)+raw_time[2:]
         textStatus.value = "Checked in at : " + raw_time
         textStatus.show()
     else:
