@@ -18,7 +18,6 @@ export default function SignUp() {
   const [invalidLastName, setInvalidLastName] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [invalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
-  const isLoggedIn = pb.authStore.isValid;
 
   function capitalize(s) {
     return s && s[0].toUpperCase() + s.slice(1);

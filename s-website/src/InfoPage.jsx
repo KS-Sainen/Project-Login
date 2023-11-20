@@ -12,13 +12,21 @@ export default function InfoPage() {
   const [info, setInfo] = useState({});
   const [status, setStatus] = useState();
   const roomLabel = room[0] + "." + room[1] + "/" + room[2];
+  const formattedArrivalTime = new Date(info.arrival_time).toLocaleString(
+    "en-US",
+    { hour12: false }
+  );
+  const formattedDepartureTime = new Date(info.departure_time).toLocaleString(
+    "en-US",
+    { hour12: false }
+  );
 
   const searchImagePath = async () => {
     const record = await pb.collection(room).getOne(key, {});
     let path = {};
 
     record.pictures.forEach((item) => {
-      if (item.startsWith("main")) {
+      if (item.startsWith("main") || item.startsWith("img")) {
         path = item;
       }
     });
@@ -57,6 +65,14 @@ export default function InfoPage() {
     ["CLASS", String(roomLabel).toUpperCase()],
     ["SCHOOL ID", info.school_id],
     ["PHONE NUMBER", info.phone_number],
+    [
+      "LAST ARRIVAL TIME",
+      formattedArrivalTime == "Invalid Date" ? "N/A" : formattedArrivalTime,
+    ],
+    [
+      "LAST DEPARTURE TIME",
+      formattedDepartureTime == "Invalid Date" ? "N/A" : formattedDepartureTime,
+    ],
   ];
 
   return (
