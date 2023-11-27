@@ -80,19 +80,28 @@ export default function SignUp() {
         invalidConfirmPassword
       )
     ) {
-      const data = {
-        username: capitalize(FirstName) + capitalize(LastName),
-        email: Email,
-        password: Password,
-        passwordConfirm: PasswordConfirm,
-        firstName: capitalize(FirstName),
-        middleName: capitalize(MiddleName),
-        lastName: capitalize(LastName),
-        role: "visitor",
-      };
-      const record = await pb.collection("Users").create(data);
-      alert("Account Created Successfully");
-      window.location.href = "/signin";
+      setLoading(true);
+      if (isLoading) {
+        try {
+          const data = {
+            username: capitalize(FirstName) + capitalize(LastName),
+            email: Email,
+            password: Password,
+            passwordConfirm: PasswordConfirm,
+            firstName: capitalize(FirstName),
+            middleName: capitalize(MiddleName),
+            lastName: capitalize(LastName),
+            role: "visitor",
+          };
+          const record = await pb.collection("Users").create(data);
+          alert("Account Created Successfully");
+          window.location.href = "/signin";
+          setLoading(false);
+        } catch (e) {
+          console.log(e);
+          setLoading(false);
+        }
+      }
     }
   };
 
