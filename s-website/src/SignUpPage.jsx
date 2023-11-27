@@ -19,6 +19,11 @@ export default function SignUp() {
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [invalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
 
+  const isLoggedIn = pb.authStore.isValid;
+  if (isLoggedIn) {
+    return (window.location.href = "/class");
+  }
+
   function capitalize(s) {
     return s && s[0].toUpperCase() + s.slice(1);
   }
@@ -94,10 +99,6 @@ export default function SignUp() {
       }
     }
   };
-
-  if (isLoggedIn) {
-    return (window.location.href = "/class");
-  }
 
   return (
     <>

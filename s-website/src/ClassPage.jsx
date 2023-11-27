@@ -74,7 +74,7 @@ export default function ClassHome() {
             {roomLabel.toUpperCase()}
           </div>
         </div>
-        <div className="bg-[#5A5B5C] w-[350px] h-[700px] xl:w-[1450px] xl:h-[500px] rounded-tr-[50px] rounded-b-[50px]">
+        <div className="cursor-default bg-[#5A5B5C] w-[350px] h-[700px] xl:w-[1450px] xl:h-[500px] rounded-tr-[50px] rounded-b-[50px]">
           <div className="float-left w-[290px] h-[340px] xl:w-[1000px] xl:h-[440px] mt-[30px] outline-[#D9D9D9] outline text-black text-xs xl:text-2xl py-2 font-bold rounded-2xl ml-[25px]">
             <div className="float-left text-left grid grid-cols-4 gap-10 xl:gap-56 mt-[10px] bg-gray-300 outline-[#D9D9D9] w-[250px] xl:w-[950px] outline text-gray-500 text-xs xl:text-2xl py-2 font-bold rounded-2xl pr-[80px] pl-5 ml-[25px] mb-3">
               <div className="-ml-1 xl:ml-[45px]">No.</div>
@@ -101,7 +101,7 @@ export default function ClassHome() {
           </div>
 
           {/*activity box*/}
-          <div className="bg-[#D9D9D9] w-[320px] h-[270px] xl:w-[300px] xl:h-[450px] float-right mr-[17px] xl:mr-[60px] mt-[30px] xl:mt-[25px] rounded-3xl">
+          <div className="cursor-default bg-[#D9D9D9] w-[320px] h-[270px] xl:w-[300px] xl:h-[450px] float-right mr-[17px] xl:mr-[60px] mt-[30px] xl:mt-[25px] rounded-3xl">
             <div className="text-sm xl:text-xl mt-4 xl:mt-5 font-extrabold">
               STUDENT ATTENDANCE
             </div>
